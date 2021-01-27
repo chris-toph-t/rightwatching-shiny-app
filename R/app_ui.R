@@ -4,21 +4,29 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinythemes
+#' @import waiter
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    fluidPage(  
+    fluidPage(
       use_waiter(),
       use_waitress(),
-      navbarPage(theme=shinythemes::shinytheme("paper"),
-                 title = tags$b("Rightwatching Data Report"),
-                 windowTitle = "Rightwatching Data Report",
+      navbarPage(theme=shinytheme("paper"),
+                 title = tags$b("Rechte Gewalt Datenreport"),
+                 windowTitle = "Rechte Gewalt Datenreport",
                  id = "mainNavbar",
-                 mod_load_data_ui("load_data_ui_1")
+                 source(file.path("R", "tab-intro.R"),  local = TRUE)$value,
+                 source(file.path("R", "tab-load.R"),  local = TRUE)$value,
+                 source(file.path("R", "tab-visualize.R"),  local = TRUE)$value,
+                 source(file.path("R", "tab-contextualize.R"),  local = TRUE)$value,
+                 source(file.path("R", "tab-verify.R"),  local = TRUE)$value,
+                 source(file.path("R", "tab-download.R"),  local = TRUE)$value
+                 
       )
+      
     )
   )
 }

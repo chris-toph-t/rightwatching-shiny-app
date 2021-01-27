@@ -2,8 +2,12 @@
 
 export(run_app)
 import(dplyr)
+import(ggplot2)
+import(ggspatial)
+import(hrbrthemes)
 import(shiny)
 import(shinythemes)
+import(viridis)
 import(waiter)
 importFrom(config,get)
 importFrom(dplyr,summarise)
