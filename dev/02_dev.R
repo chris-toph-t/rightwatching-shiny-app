@@ -15,16 +15,29 @@
 
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
-usethis::use_package( "thinkr" )
+usethis::use_package( "htmltools" )
+usethis::use_package( "shinythemes" )
+usethis::use_package( "hrbrthemes" )
+usethis::use_package( "tidyverse", type = "depends")
+usethis::use_package( "ggrepel" )
+usethis::use_package( "sf" )
+usethis::use_package( "viridis" )
+usethis::use_package( "hexbin" )
+usethis::use_package( "waiter" )
+usethis::use_package( "tm" )
+usethis::use_package( "vroom" )
+usethis::use_package( "cowplot" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
-golem::add_module( name = "name_of_module1" ) # Name of the module
-golem::add_module( name = "name_of_module2" ) # Name of the module
+golem::add_module( name = "load_data" ) 
+golem::add_module( name = "visualize" ) 
+golem::add_module( name = "contextualize" ) 
+golem::add_module( name = "verify" ) 
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
-golem::add_fct( "helpers" ) 
+golem::add_fct( "summarise" ) 
 golem::add_utils( "helpers" )
 
 ## External resources
