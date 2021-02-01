@@ -1,0 +1,72 @@
+---
+title: "Rightwatching Data Report"
+author: "Rightwatching"
+date: !r Sys.Date()
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+## Überblick
+
+### `r input$barchart_header1`
+
+`r input$barchart_text1`
+
+```{r barchart, fig.width=12}
+make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+```
+
+
+### `r input$county_timline_header1`
+
+`r input$county_timline_text1`
+
+```{r county_timline, fig.width=12}
+validate(
+        need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen!')
+      )
+      make_county_timeline(data = chronik_by_county(), selected_kreise = input$county_timeline_option1) 
+```
+
+## Daten im Kontext
+
+### `r input$county_timline_header1`
+
+`r input$county_timline_text1`
+
+
+```{r barchart, fig.width=12}
+make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+```
+
+### `r input$county_timline_header1`
+
+`r input$county_timline_text1`
+
+
+```{r barchart, fig.width=12}
+make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+```
+
+### `r input$county_timline_header1`
+
+`r input$county_timline_text1`
+
+
+```{r barchart, fig.width=12}
+make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+```
+
+
+
+
+
+
+
+
+

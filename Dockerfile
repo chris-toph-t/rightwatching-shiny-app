@@ -23,6 +23,7 @@ RUN Rscript -e 'remotes::install_version("hrbrthemes",upgrade="never", version =
 RUN Rscript -e 'remotes::install_version("shinythemes",upgrade="never", version = "1.2.0")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.16")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.2.1")'
+RUN Rscript -e 'remotes::install_version("ggspatial",upgrade="never", version = "1.1.4")'
 RUN locale-gen de_DE.UTF-8 && \
     update-locale
 RUN mkdir /build_zone

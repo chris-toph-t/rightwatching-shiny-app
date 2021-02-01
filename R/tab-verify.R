@@ -15,7 +15,7 @@ tabPanel(title = "Daten prüfen",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("source_multiple_header1")),
-                   plotOutput('source_multiple', height = "750px"),
+                   plotOutput('source_multiple_map', height = "750px"),
                    p(textOutput("source_multiple_text1"))
                    # ------------------------------------------------------------------------------
          )),

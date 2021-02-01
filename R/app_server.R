@@ -3,11 +3,11 @@
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @import dplyr
-#' @import ggspatial
-#' @import ggplot2
 #' @import viridis
+#' @import hrbrthemes
 #' @noRd
+
+#librarian::shelf(shinythemes, hexbin, waiter, tm, cowplot, lib =librarian::lib_paths()[1])
 app_server <- function( input, output, session ) {
   
   
@@ -105,45 +105,7 @@ app_server <- function( input, output, session ) {
     })
     
     output$context_map <- renderPlot({
-      if (input$context_map_option1 == "Wahlergebnisse") {
-        kreise %>%
-          left_join(select(
-            filter(votes_data, PART04 == input$context_map_option3), id, vote_percentage), 
-            by = c("AGS_KREIS_ID" = "id")) -> kreise
-        
-        make_context_map() +
-          geom_sf(data = kreise, aes(geometry = geometry, alpha = vote_percentage), fill = "orange") +
-          #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-          geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
-          scale_fill_viridis(option = "cividis", direction = -1) +
-          labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option3, " WählerInnen, %"))
-      }
-      else if (input$context_map_option1 == "Bevölkerung") {
-        w$show()
-        make_context_map(baselayer = kreise) +
-          geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "Blue", lwd=0) +
-          stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
-          scale_fill_viridis(option = "C", name = "Vorfälle laut Chronik", direction = -1) +
-          labs(alpha = "Bevölkerungsdichte")
-        #w$hide()
-      }
-      else if (input$context_map_option1 == "AusländerInnen-Anteil") {
-        make_context_map() +
-          geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
-          #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-          geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
-          scale_fill_viridis(option = "cividis", direction = -1) +
-          labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen")
-      }
-      else if (input$context_map_option1 == "NSDAP-WählerInnen 1933") {
-        pt1 <- make_context_map() +
-          geom_sf(data = kreise, aes(geometry = geometry)) +
-          geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
-          labs(size = "Vorfälle rechter Gewalt")
-        pt2 <- make_historic_map() 
-        
-        cowplot::plot_grid(pt1, pt2, align = "h")
-      }
+      make_context_map(context_map_option1 = input$context_map_option1)
     })
     output$context_map_text1 <- renderText({ input$context_map_text1 })
     ## End Tab Contextualize  #####################################################
@@ -153,16 +115,8 @@ app_server <- function( input, output, session ) {
     
     # Start of source_multiple map  #####################################################
     output$source_multiple_header1 <- renderText({ input$source_multiple_header1 })
-    output$source_multiple <- renderPlot({
-      make_context_map(baselayer = kreise) +
-        geom_jitter(data = chronik_filtered(), aes(x = lon, y = lat, color = source_group, group=source_group), width = 0.05, height = 0.05, size = 0.7) +
-        #scale_color_manual(values = c("black", "#1B9E77"), name="Kontaktaufname") +
-        #geom_label_repel(data = labels, aes(x = longitude_to, y = latitude_to, label = label), nudge_x = 10) +
-        coord_sf() +
-        labs(caption = "Punkte sind hier nicht genau auf dem Ort des Vorfalls") + 
-        facet_wrap(~source_group) + 
-        theme_transparent() + 
-        theme(legend.position = "right")
+    output$source_multiple_map <- renderPlot({
+      make_source_multiple_map()
     })
     output$source_multiple_text1 <- renderText({ input$source_multiple_text1 })
     # End of source_map############################################################
@@ -172,15 +126,7 @@ app_server <- function( input, output, session ) {
     source_map_choices <- unique(chronik_enriched$source_group)
     updateSelectInput(session, "source_map_option1", choices = source_map_choices) 
     output$source_map <- renderPlot({
-      ggplot() +
-        geom_sf(data = kreise, aes(geometry = geometry), fill = "grey60") +
-        stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat), alpha = 0.9, binwidth = 0.05) +
-        scale_fill_viridis(option = "inferno", direction = -1, name = "Vorfälle in Chronik") +
-        geom_point(data = filter(chronik_by_source_place(), source_group == input$source_map_option1), aes(x = lon, y = lat, size = n), fill = "black") +
-        coord_sf() +
-        labs(size = input$source_map_option1) +
-        theme_transparent()	
-      
+      make_source_map()
     })
     output$source_map_text1 <- renderText({ input$source_map_text1 })
     # End of source_map############################################################
@@ -196,6 +142,35 @@ app_server <- function( input, output, session ) {
     
     
     ## End Tab Verify  #####################################################
+    
+    
+    ## Start Tab Download  #####################################################
+    output$report <- downloadHandler(
+      # For PDF output, change this to "report.pdf"
+      filename = function() {
+        paste('report', sep = '.', switch(
+          input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
+        ))
+      },
+      content = function(file) {
+        # Copy the report file to a temporary directory before processing it, in
+        # case we don't have write permissions to the current working dir (which
+        # can happen when deployed).
+        tempReport <- file.path(tempdir(), "report.Rmd")
+        file.copy(file.path("R", "report.Rmd"), tempReport, overwrite = TRUE)
+        
+        waiter_show(html = waiting_screen, color = "grey")
+        library(rmarkdown)
+        render(tempReport,
+               output_file = file, 
+               switch(input$format,
+                      PDF = pdf_document(), 
+                      HTML = html_document(), 
+                      Word = word_document()
+        ))
+      }
+    )
+    ## End Tab Download  #####################################################
     
     waiter_hide()
     #closing load action block
