@@ -27,7 +27,7 @@ app_server <- function( input, output, session ) {
   
   session$onSessionEnded(stopApp)
   
-  w <- Waiter$new(id = c("context_map"))
+  w <- Waiter$new(id = c("context_map2"))
   ## Start Tab Load  #####################################################
   observeEvent(input$load, {
     source(file.path("R", "def_plot.R"),  local = TRUE)
@@ -97,17 +97,24 @@ app_server <- function( input, output, session ) {
     
     ## Start Tab Contextualize  #####################################################
     output$context_map_header1 <- renderText({ input$context_map_header1 })
-    output$context_map_option2 <- renderUI({
-      req(input$context_map_option1 == "Wahlergebnisse")
-      selectInput("context_map_option3", "Partei auswählen",
-                  unique(dplyr::filter(votes_data, PART04 != "GESAMT")$PART04)
-      )
-    })
-    
-    output$context_map <- renderPlot({
-      make_context_map(context_map_option1 = input$context_map_option1)
-    })
+    output$context_map_option1 <- renderUI({
+      selectInput("context_map_option2", "Partei auswählen",unique(dplyr::filter(votes_data, PART04 != "GESAMT")$PART04))})
+    output$context_map1 <- renderPlot({make_context_map1(party = input$context_map_option2)})
     output$context_map_text1 <- renderText({ input$context_map_text1 })
+    
+    output$context_map_header2 <- renderText({ input$context_map_header2 })
+    output$context_map2 <- renderPlot({
+      w$show()
+      make_context_map2()})
+    output$context_map_text2 <- renderText({ input$context_map_text2 })
+    
+    output$context_map_header3 <- renderText({ input$context_map_header3 })
+    output$context_map3 <- renderPlot({make_context_map3()})
+    output$context_map_text3 <- renderText({ input$context_map_text3 })
+    
+    output$context_map_header4 <- renderText({ input$context_map_header4 })
+    output$context_map4 <- renderPlot({make_context_map4()})
+    output$context_map_text4 <- renderText({ input$context_map_text4 })
     ## End Tab Contextualize  #####################################################
     
     
