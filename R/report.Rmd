@@ -35,37 +35,50 @@ validate(
 
 ## Daten im Kontext
 
-### `r input$county_timline_header1`
 
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
-```
-
-### `r input$county_timline_header1`
-
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
-```
-
-### `r input$county_timline_header1`
-
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+### `r input$context_map_header1`
+`r input$context_map_text1`
+```{r contextmap1, fig.width=12}
+make_context_map1(party = input$context_map_option2)
 ```
 
 
+### `r input$context_map_header2`
+`r input$context_map_text2`
+```{r contextmap2, fig.width=12}
+make_context_map2()
+```
 
 
+### `r input$context_map_header3`
+`r input$context_map_text3`
+```{r contextmap3, fig.width=12}
+make_context_map3()
+```
 
+
+### `r input$context_map_header4`
+`r input$context_map_text4`
+```{r contextmap4, fig.width=12}
+make_context_map4()
+```
+
+
+## Daten prüfen
+
+
+### `r input$source_multiple_header1`
+`r input$source_multiple_text1`
+```{r source multiple map, fig.width=12}
+make_source_multiple_map()
+```
+
+
+### `r input$source_map_header1`
+`r input$source_map_text1`
+```{r source map, fig.width=12}
+make_source_map()
+```
 
 
 
