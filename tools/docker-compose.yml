@@ -1,0 +1,46 @@
+version: "2"
+services:
+  swag:
+    image: linuxserver/swag
+    depends_on:
+      - shinyproxy
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=app.rightwatching.org
+      - SUBDOMAINS=
+      - VALIDATION=http
+    volumes:
+      - /root/appdata:/config
+    ports:
+      - 443:443
+      - 80:80
+    networks:
+      - sp-net
+    restart: unless-stopped
+  shinyproxy:
+    image: shinyproxy
+    depends_on:
+      - rightwatching
+    container_name: shinyproxy
+    expose:
+      - 8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/logs:/opt/shinyproxy/logs/
+    networks:
+      - sp-net
+  rightwatching:
+    image: chris1oph/rightwatching
+    container_name: rightwatching
+    restart: unless-stopped
+    expose:
+      - 3838
+
+networks:
+  sp-net:
+    name: sp-net
