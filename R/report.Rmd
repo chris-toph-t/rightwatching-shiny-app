@@ -6,12 +6,19 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
 ```
 
 
 
 ## Überblick
+
+`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat))), nrow(filter(chronik_filtered(), is.na(lat))), " nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
+
 
 ### `r input$barchart_header1`
 
@@ -27,46 +34,65 @@ make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 `r input$county_timline_text1`
 
 ```{r county_timline, fig.width=12}
-validate(
-        need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen!')
-      )
       make_county_timeline(data = chronik_by_county(), selected_kreise = input$county_timeline_option1) 
 ```
 
 ## Daten im Kontext
 
-### `r input$county_timline_header1`
 
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
-```
-
-### `r input$county_timline_header1`
-
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
-```
-
-### `r input$county_timline_header1`
-
-`r input$county_timline_text1`
-
-
-```{r barchart, fig.width=12}
-make_barchart(data = chronik_filtered(), level = input$barchart_option1)
+### `r input$context_map_header1`
+`r input$context_map_text1`
+```{r contextmap1, fig.width=12}
+make_context_map1(party = input$context_map_option2)
 ```
 
 
+### `r input$context_map_header2`
+`r input$context_map_text2`
+```{r contextmap2, fig.width=12}
+make_context_map2()
+```
 
 
+### `r input$context_map_header3`
+`r input$context_map_text3`
+```{r contextmap3, fig.width=12}
+make_context_map3()
+```
 
 
+### `r input$context_map_header4`
+`r input$context_map_text4`
+```{r contextmap4, fig.width=12}
+make_context_map4()
+```
 
 
+## Daten prüfen
 
+
+### `r input$source_multiple_header1`
+`r input$source_multiple_text1`
+```{r source multiple map, fig.width=12}
+make_source_multiple_map()
+```
+
+
+### `r input$source_map_header1`
+`r input$source_map_text1`
+```{r source map, fig.width=12}
+make_source_map()
+```
+
+### `r input$missing_table_header1`
+
+`r input$missing_table_text1`
+```{r missingplot, fig.width=12}
+make_missing_plot()
+```
+
+#### Vorfälle die nicht oder ungenügend lokalisiert worden sind
+```{r}
+chronik_missing <- chronik_missing()
+knitr::kable(chronik_missing)
+```
