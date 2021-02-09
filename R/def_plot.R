@@ -118,6 +118,11 @@ make_nationality_barchart <- function() {
 
 }
 
+make_missing_plot <- function() {
+  vis_miss(chronik_enriched) +
+    labs(y = "Vorfälle", caption = "Vorfälle mit fehlenden Angaben sind hier dargestellt", x = "Vorfallsattribute")
+}
+
 make_source_multiple_map <- function() {
   make_base_map(baselayer = kreise) +
     geom_jitter(data = chronik_filtered(), aes(x = lon, y = lat, color = source_group, group=source_group), width = 0.05, height = 0.05, size = 0.7) +

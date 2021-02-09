@@ -17,6 +17,9 @@ knitr::opts_chunk$set(
 
 ## Überblick
 
+`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat))), nrow(filter(chronik_filtered(), is.na(lat))), " nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
+
+
 ### `r input$barchart_header1`
 
 `r input$barchart_text1`
@@ -81,6 +84,15 @@ make_source_multiple_map()
 make_source_map()
 ```
 
+### `r input$missing_table_header1`
 
+`r input$missing_table_text1`
+```{r missingplot, fig.width=12}
+make_missing_plot()
+```
 
-
+#### Vorfälle die nicht oder ungenügend lokalisiert worden sind
+```{r}
+chronik_missing <- chronik_missing()
+knitr::kable(chronik_missing)
+```

@@ -5,6 +5,7 @@
 #' @import shiny
 #' @import viridis
 #' @import hrbrthemes
+#' @import visdat
 #' @noRd
 
 #librarian::shelf(shinythemes, hexbin, waiter, tm, cowplot, lib =librarian::lib_paths()[1])
@@ -35,14 +36,15 @@ app_server <- function( input, output, session ) {
     waiter_show(html = waiting_screen, color = "grey")
     #load the right org file depending on input. this needs to be checked properly: scoping, link to user session, create empty env before loading? 
     load(file.path("data", input$select_org))
-    
+
     #add filter logic: all following elements will use the filter bounds specified by this function in UI. chornik_filtered is a reactive elements
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
     chronik_filtered <- reactive(chronik_enriched %>%
                                    filter(date >= input$dates[1],
-                                          date <= input$dates[2]
-                                   ))
+                                          date <= input$dates[2]) %>%
+                                   select(-descr)
+                                   )
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
                   "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat))), "<br>", 
@@ -81,7 +83,7 @@ app_server <- function( input, output, session ) {
     output$county_timeline_header1 <- renderText({ input$county_timeline_header1 })
     #reactive graph: rdata file -> date1&date2 -> chronik_filtered -> summarised into chornik_by_county. we observe for changes in the latter to adjust allowed select values 
     observeEvent(chronik_by_county(), {
-      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$admin6)) 
+      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$admin6), selected = unique(chronik_by_county()$admin6)) 
     })
     output$county_timeline <- renderPlot({
       #show a message instead of plot when no input selected
@@ -121,6 +123,20 @@ app_server <- function( input, output, session ) {
     ## Start Tab Verify  #####################################################
     
     # Start of source_multiple map  #####################################################
+    output$missing_table_header1 <- renderText({ input$missing_table_header1 })
+    chronik_missing <- reactive(chronik_filtered() %>%
+                                  filter(is.na(lat) | is.na(lon)))
+    output$missing_table <- shiny::renderDataTable(
+                              chronik_missing(), 
+                              options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
+
+    output$missing_plot <- renderPlot({
+      make_missing_plot()
+    })
+    output$missing_table_text1 <- renderText({ input$missing_table_text1 })
+    # End of source_map############################################################
+    
+    # Start of source_multiple map  #####################################################
     output$source_multiple_header1 <- renderText({ input$source_multiple_header1 })
     output$source_multiple_map <- renderPlot({
       make_source_multiple_map()
@@ -153,6 +169,9 @@ app_server <- function( input, output, session ) {
     
     ## Start Tab Download  #####################################################
     output$report <- downloadHandler(
+      validate(
+        need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen im Tab <b>Daten darstellen</b>!')
+      ),
       # For PDF output, change this to "report.pdf"
       filename = function() {
         paste('report', sep = '.', switch(
@@ -163,6 +182,7 @@ app_server <- function( input, output, session ) {
         # Copy the report file to a temporary directory before processing it, in
         # case we don't have write permissions to the current working dir (which
         # can happen when deployed).
+        
         tempReport <- file.path(tempdir(), "report.Rmd")
         file.copy(file.path("R", "report.Rmd"), tempReport, overwrite = TRUE)
         
@@ -179,7 +199,7 @@ app_server <- function( input, output, session ) {
       }
     )
     ## End Tab Download  #####################################################
-    
+    waiter_hide()
     
     #closing load action block
   })

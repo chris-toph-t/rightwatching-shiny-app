@@ -43,7 +43,7 @@ tabPanel(title = "Daten im Kontext",
          fluidRow(column(3,
                          # links: -----------------------------------------------------------------------
                          textAreaInput("context_map_header3", "Überschrift", value = "Vorfälle und Anteil ausländischer MitbürgerInnen", rows = 2, resize = "none") %>%
-                           shiny::tagAppendAttributes(style = 'width: 100%;'),
+                           shiny::tagAppendAttributes(style = 'width: 100%;', height = "400px"),
                          textAreaInput("context_map_text3", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit dem Anteil ausländischer MitbürgerInnen, Quelle: regionalstatistik.de", rows = 7, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;')
                          

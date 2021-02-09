@@ -27,6 +27,8 @@ usethis::use_package( "waiter" )
 usethis::use_package( "tm" )
 usethis::use_package( "vroom" )
 usethis::use_package( "cowplot" )
+usethis::use_package( "visdat" )
+usethis::use_package( "skimr" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
