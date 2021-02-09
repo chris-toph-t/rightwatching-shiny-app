@@ -175,11 +175,12 @@ app_server <- function( input, output, session ) {
                       HTML = html_document(), 
                       Word = word_document()
         ))
+        waiter_hide()
       }
     )
     ## End Tab Download  #####################################################
     
-    waiter_hide()
+    
     #closing load action block
   })
 }

@@ -6,7 +6,11 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
 ```
 
 
@@ -27,9 +31,6 @@ make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 `r input$county_timline_text1`
 
 ```{r county_timline, fig.width=12}
-validate(
-        need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen!')
-      )
       make_county_timeline(data = chronik_by_county(), selected_kreise = input$county_timeline_option1) 
 ```
 
