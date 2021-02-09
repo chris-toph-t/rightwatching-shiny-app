@@ -1,0 +1,47 @@
+
+proxy:
+  port: 8080
+  authentication: simple
+  template-path: ./templates
+  admin-groups: admins
+  users:
+  - name: christoph
+    password: zuerich
+    groups: admins
+  - name: jakob
+    password: kiel
+    groups: admin
+  - name: miki
+    password: zuerich
+    groups: admin
+  docker:
+      internal-networking: true
+  specs:
+  - id: shiny-report-front
+    display-name: Chronik-Report
+    description: Rechtsaussen
+    container-cmd: []
+    container-volumes: ["/root/rechtsaussen-shiny-app/data/:/srv/data/"]
+    container-image: chris1oph/rightwatching
+    container-network: sp-net
+  support:
+    mail-to-address: christoph@rightwatching.org
+    mail-from-address: support@rightwatching.org
+  container-log-path: /opt/shinyproxy/logs/
+
+spring:
+  mail:
+    host: desdemonia.uberspace.de
+    # TLS: 587 SSL: 465 Plain: 25
+    port: 587
+    username: support@rightwatching.org
+    password: my_password
+    properties:
+      # For StartTLS
+      mail.smtp.starttls.enable: true
+      # For SSL
+      #mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+
+logging:
+  file:
+    /opt/shinyproxy/logs/shinyproxy.log
