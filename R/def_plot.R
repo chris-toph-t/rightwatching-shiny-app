@@ -1,9 +1,9 @@
 theme_transparent <- function(base_size = 12, base_family = "Helvetica"){
-  theme_void() %+replace%
+  theme_ipsum() %+replace%
     theme(
       panel.background = element_rect(fill = "transparent", color = NA), # bg of the panel
       plot.background = element_rect(fill = "transparent", color = NA),
-      legend.position = "bottom"
+      legend.position = "right"
     )
 }
 
@@ -41,39 +41,6 @@ make_source_timeline <- function(data = chronik_by_source_date) {
     theme(legend.position = "bottom") 
 }
 
-# 
-# make_population_map <- function(data = chronik_enriched) {
-#   #make map with boundaries of counties, population density, all incidents overlaid and county labels
-#   ggplot() + 
-#     geom_sf(data = kreise, aes(geometry = geometry)) +
-#     geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "#000000", lwd=0) +
-#     scale_alpha(name = "Bevölkerungsdichte") +
-#     stat_bin_hex(data = data, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-#     scale_fill_viridis(option = "inferno", direction = -1, name = "Vorfälle laut Chronik") +
-#     geom_text_repel(data = kreise, aes(geometry = geometry, label = NAME_LATN), stat = "sf_coordinates", size = 4, color = "grey30") +
-#     coord_sf() + 
-#     theme_transparent()
-#   
-# }
-
-
-# make_source_map <- function(data = chronik_by_source_place, sourcegroup = "Hessenschauthin", label = "Vorfälle aus internen Quellen") {
-# #to make police map, change default sourcegroup to "Presseportal" or any other grouping of sources as per 04_clean script and adjust label
-#   ggplot() + 
-#     geom_sf(data = kreise, aes(geometry = geometry), fill = "grey60") +
-#     stat_bin_hex(data = data, aes(x = lon, y = lat), alpha = 0.9, binwidth = 0.05) +
-#     scale_fill_viridis(option = "inferno", direction = -1, name = "Vorfälle in Chronik") +
-#     geom_point(data = filter(data, source_group == sourcegroup), aes(x = lon, y = lat, size = n), fill = "black") +
-#     #scale_color_manual(values = c("black", "#1B9E77"), name="Kontaktaufname") +
-#     #geom_label_repel(data = labels, aes(x = longitude_to, y = latitude_to, label = label), nudge_x = 10) +
-#     coord_sf() + 
-#     #theme(legend.position = "none") +
-#     labs(size = label) + 
-#     theme_transparent() 
-# }
-
-
-
 
 make_base_map <- function(baselayer = kreise) {
   #to make police map, change default sourcegroup to "Presseportal" or any other grouping of sources as per 04_clean script and adjust label
@@ -99,11 +66,10 @@ make_historic_map <- function(data = historic_filtered) {
     theme_transparent()
 }
 
-make_context_map <- function(context_map_option1) {
-  if (context_map_option1 == "Wahlergebnisse") {
+make_context_map1 <- function(party = input$context_map_option2) {
     kreise %>%
       left_join(select(
-        filter(votes_data, PART04 == input$context_map_option3), id, vote_percentage), 
+        filter(votes_data, PART04 == party), id, vote_percentage), 
         by = c("AGS_KREIS_ID" = "id")) -> kreise
     
     make_base_map() +
@@ -111,36 +77,35 @@ make_context_map <- function(context_map_option1) {
       #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
       geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
       scale_fill_viridis(option = "cividis", direction = -1) +
-      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option3, " WählerInnen, %"))
-  }
-  else if (context_map_option1 == "Bevölkerung") {
-    w$show()
-    make_base_map(baselayer = kreise) +
-      geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "Blue", lwd=0) +
-      stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
-      scale_fill_viridis(option = "C", name = "Vorfälle laut Chronik", direction = -1) +
-      labs(alpha = "Bevölkerungsdichte")
-    #w$hide()
-  }
-  else if (context_map_option1 == "AusländerInnen-Anteil") {
-    make_base_map() +
-      geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
-      #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-      geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
-      scale_fill_viridis(option = "cividis", direction = -1) +
-      labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen")
-  }
-  else if (context_map_option1 == "NSDAP-WählerInnen 1933") {
-    pt1 <- make_base_map() +
-      geom_sf(data = kreise, aes(geometry = geometry)) +
-      geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
-      labs(size = "Vorfälle rechter Gewalt")
-    pt2 <- make_historic_map() 
-    
-    cowplot::plot_grid(pt1, pt2, align = "h")
-  }
-  
+      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option2, " WählerInnen, %")) +
+      theme(legend.position = "right")
 }
+
+make_context_map2 <- function () {
+  make_base_map(baselayer = kreise) +
+    geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "Blue", lwd=0) +
+    stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
+    scale_fill_viridis(option = "C", name = "Vorfälle laut Chronik", direction = -1) +
+    labs(alpha = "Bevölkerungsdichte")
+}
+make_context_map3 <- function() {
+  make_base_map() +
+    geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
+    #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
+    geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
+    scale_fill_viridis(option = "cividis", direction = -1) +
+    labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen")
+}
+make_context_map4 <- function() {
+  pt1 <- make_base_map() +
+    geom_sf(data = kreise, aes(geometry = geometry)) +
+    geom_point(data = chronik_by_place(), aes(x = lon, y = lat, size = n), fill = "black", color = "grey20") +
+    labs(size = "Vorfälle rechter Gewalt")
+  pt2 <- make_historic_map() 
+  
+  cowplot::plot_grid(pt1, pt2, align = "h")
+}
+
 
 
 make_nationality_barchart <- function() {
@@ -151,6 +116,11 @@ make_nationality_barchart <- function() {
     facet_wrap(~name) +
     labs(y = "Prozent", x = "Jahr") 
 
+}
+
+make_missing_plot <- function() {
+  vis_miss(chronik_enriched) +
+    labs(y = "Vorfälle", caption = "Vorfälle mit fehlenden Angaben sind hier dargestellt", x = "Vorfallsattribute")
 }
 
 make_source_multiple_map <- function() {

@@ -19,7 +19,7 @@ tabPanel(title = "Daten prüfen",
                    p(textOutput("source_multiple_text1"))
                    # ------------------------------------------------------------------------------
          )),
-         # source_ultiple end ###############################################################
+         # source_multiple end ###############################################################
          
          # source_mapcloud start ############################################################'
          fluidRow(
@@ -48,5 +48,22 @@ tabPanel(title = "Daten prüfen",
                         # ------------------------------------------------------------------------------
          )),
          # source_mapcloud end ###############################################################
-         
+         # missing start ############################################################'
+         fluidRow(column(3,
+                         # links: -----------------------------------------------------------------------
+                         textAreaInput("missing_table_header1", "Überschrift", value = "Vorfälle die nicht oder ungenau lokalisiert worden", rows = 2, resize = "none") %>%
+                           shiny::tagAppendAttributes(style = 'width: 100%;'),
+                         textAreaInput("missing_table_text1", "Beschreibung", value = "Beim Geokodieren - der Prozess Orte auf der Karte zu lokalisieren - lief etwas schief. Manchmal liegt es an ungenauen oder doppeldeutigen Ortsangaben.", rows = 7, resize = "none") %>%
+                           shiny::tagAppendAttributes(style = 'width: 100%;')
+                         
+                         # ------------------------------------------------------------------------------
+         ), column(width = 9,
+                   # rechts:-----------------------------------------------------------------------
+                   h3(textOutput("missing_table_header1")),
+                   plotOutput('missing_plot'),
+                   dataTableOutput('missing_table'),
+                   p(textOutput("missing_table_text1"))
+                   # ------------------------------------------------------------------------------
+         )),
+         # missing end ###############################################################
 )
