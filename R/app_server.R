@@ -5,7 +5,7 @@
 #' @import shiny
 #' @import viridis
 #' @import hrbrthemes
-#' @import tidyverse
+#' @import dplyr
 #' @import visdat
 #' @import shinythemes
 #' @import hexbin
@@ -14,7 +14,7 @@
 #' @import cowplot
 #' @noRd
 
-#library(shinythemes, hexbin, waiter, cowplot, tidyverse)
+library(shinythemes, hexbin, waiter, tidyverse)
 app_server <- function( input, output, session ) {
   
   
