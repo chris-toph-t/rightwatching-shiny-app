@@ -24,8 +24,6 @@ services:
     restart: unless-stopped
   shinyproxy:
     image: shinyproxy
-    depends_on:
-      - rightwatching
     container_name: shinyproxy
     expose:
       - 8080
@@ -34,12 +32,6 @@ services:
       - /root/logs:/opt/shinyproxy/logs/
     networks:
       - sp-net
-  rightwatching:
-    image: chris1oph/rightwatching
-    container_name: rightwatching
-    restart: unless-stopped
-    expose:
-      - 3838
 
 networks:
   sp-net:

@@ -1,3 +1,5 @@
+**ACHTUNG** **Das ist eine Demo. Der Datensatz ist frei erfunden**
+
 ## Was gibt es hier?
 
 Dieses Programm stellt Chroniken rechter Gewalt dar, platziert die Daten rechter Gewalt in einem Kontext (Wahlverhalten, Bevölkerungsdichte, etc), erlaubt es diese Daten zu verifizieren (erscheinen sie vollständig?) und generiert Berichte daraus die NutzerInnen herunterladen können. 
