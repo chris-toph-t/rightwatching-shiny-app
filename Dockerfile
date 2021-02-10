@@ -33,4 +33,5 @@ ADD . /build_zone
 WORKDIR /build_zone
 RUN R -e 'remotes::install_local(upgrade="never")'
 EXPOSE 3838
-CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');rightwatching::run_app()"]
+#CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');rightwatching::run_app()"]
+CMD ["R", "-e", "golem::document_and_reload(); options('shiny.port'=3838,shiny.host='0.0.0.0'); rightwatching::run_app()"]
