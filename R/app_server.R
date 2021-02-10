@@ -5,7 +5,7 @@
 #' @import shiny
 #' @import viridis
 #' @import hrbrthemes
-#' @import dplyr
+#' @import tidyverse
 #' @import visdat
 #' @import shinythemes
 #' @import hexbin
