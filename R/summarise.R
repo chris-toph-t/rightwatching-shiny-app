@@ -1,3 +1,9 @@
+#' summarising all data files into handy formats for visualization
+#' 
+#' @param input,output,session Internal parameters for {shiny}. 
+#'     DO NOT REMOVE.
+#' @import dplyr
+#' 
 
 chronik_by_source_place <- reactive(
   chronik_filtered() %>%
