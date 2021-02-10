@@ -20,7 +20,7 @@ proxy:
   - id: shiny-report-front
     display-name: Chronik-Report
     description: Rechtsaussen
-    container-cmd: []
+    container-cmd: ["R", "-e", "golem::document_and_reload(); options('shiny.port'=3838,shiny.host='0.0.0.0'); rightwatching::run_app()"]
     container-volumes: ["/root/rechtsaussen-shiny-app/data/:/srv/data/"]
     container-image: chris1oph/rightwatching
     container-network: sp-net

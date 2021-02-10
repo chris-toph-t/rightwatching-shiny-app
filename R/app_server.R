@@ -13,6 +13,7 @@
 #' @import waiter
 #' @import tm
 #' @import cowplot
+#' @import ggplot2
 #' @noRd
 
 #library(shinythemes, hexbin, waiter, dplyr)

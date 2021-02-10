@@ -28,10 +28,11 @@ RUN Rscript -e 'remotes::install_version("hrbrthemes",upgrade="never", version =
 RUN Rscript -e 'remotes::install_version("shinythemes",upgrade="never", version = "1.2.0")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.16")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.2.1")'
+RUN Rscript -e 'remotes::install_version("wordcloud",upgrade="never", version = "2.6")'
 RUN mkdir /build_zone
 ADD . /build_zone
 WORKDIR /build_zone
 RUN R -e 'remotes::install_local(upgrade="never")'
 EXPOSE 3838
 #CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');rightwatching::run_app()"]
-CMD ["R", "-e", "golem::document_and_reload(); options('shiny.port'=3838,shiny.host='0.0.0.0'); rightwatching::run_app()"]
+#CMD ["R", "-e", "golem::document_and_reload(); options('shiny.port'=3838,shiny.host='0.0.0.0'); rightwatching::run_app()"]

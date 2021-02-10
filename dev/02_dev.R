@@ -29,6 +29,7 @@ usethis::use_package( "vroom" )
 usethis::use_package( "cowplot" )
 usethis::use_package( "visdat" )
 usethis::use_package( "skimr" )
+usethis::use_package( "wordcloud" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
