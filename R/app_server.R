@@ -5,10 +5,16 @@
 #' @import shiny
 #' @import viridis
 #' @import hrbrthemes
+#' @import tidyverse
 #' @import visdat
+#' @import shinythemes
+#' @import hexbin
+#' @import waiter
+#' @import tm
+#' @import cowplot
 #' @noRd
 
-#librarian::shelf(shinythemes, hexbin, waiter, tm, cowplot, lib =librarian::lib_paths()[1])
+
 app_server <- function( input, output, session ) {
   
   
