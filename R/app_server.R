@@ -49,8 +49,7 @@ app_server <- function( input, output, session ) {
     
     chronik_filtered <- reactive(chronik_enriched %>%
                                    dplyr::filter(date >= input$dates[1],
-                                          date <= input$dates[2]) %>%
-                                   dplyr::select(-descr)
+                                          date <= input$dates[2])
                                    )
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 

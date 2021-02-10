@@ -9,7 +9,7 @@ theme_transparent <- function(base_size = 12, base_family = "Helvetica"){
 
 make_barchart <- function(data = chronik_enriched, level = month) {
   data %>%
-    ggplot(aes_string(x=level)) +
+    ggplot2::ggplot(aes_string(x=level)) +
     geom_bar() +
     scale_x_date() +
     theme_ipsum() +
