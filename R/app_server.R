@@ -14,7 +14,7 @@
 #' @import cowplot
 #' @noRd
 
-
+library(shinythemes, hexbin, waiter, cowplot, tidyverse)
 app_server <- function( input, output, session ) {
   
   
