@@ -6,6 +6,7 @@
 #' @import viridis
 #' @import hrbrthemes
 #' @import tidyverse
+#' @import dplyr
 #' @import visdat
 #' @import shinythemes
 #' @import hexbin
@@ -14,7 +15,7 @@
 #' @import cowplot
 #' @noRd
 
-library(shinythemes, hexbin, waiter, tidyverse)
+#library(shinythemes, hexbin, waiter, dplyr)
 app_server <- function( input, output, session ) {
   
   
@@ -47,13 +48,13 @@ app_server <- function( input, output, session ) {
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
     chronik_filtered <- reactive(chronik_enriched %>%
-                                   filter(date >= input$dates[1],
+                                   dplyr::filter(date >= input$dates[1],
                                           date <= input$dates[2]) %>%
-                                   select(-descr)
+                                   dplyr::select(-descr)
                                    )
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
-                  "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat))), "<br>", 
+                  "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(lat))), "<br>", 
                   "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y")
       ))
     })
