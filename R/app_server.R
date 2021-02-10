@@ -14,7 +14,7 @@
 #' @import cowplot
 #' @noRd
 
-library(shinythemes, hexbin, waiter, cowplot, tidyverse)
+#library(shinythemes, hexbin, waiter, cowplot, tidyverse)
 app_server <- function( input, output, session ) {
   
   
@@ -190,7 +190,7 @@ app_server <- function( input, output, session ) {
         # can happen when deployed).
         
         tempReport <- file.path(tempdir(), "report.Rmd")
-        file.copy(file.path("R", "report.Rmd"), tempReport, overwrite = TRUE)
+        file.copy(file.path("inst", "app", "www", "report.Rmd"), tempReport, overwrite = TRUE)
         
         waiter_show(html = waiting_screen, color = "grey")
         library(rmarkdown)
