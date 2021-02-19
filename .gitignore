@@ -1,5 +1,6 @@
 data-raw/blastula.json
 /data/*
+.RData
 .Rhistory
 .RData
 .Rproj.user
