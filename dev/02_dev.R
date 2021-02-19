@@ -31,6 +31,23 @@ usethis::use_package( "visdat" )
 usethis::use_package( "skimr" )
 usethis::use_package( "wordcloud" )
 
+
+librarian::shelf(htmltools,
+                 shinythemes,
+                 hrbrthemes,
+                 tidyverse,
+                 ggrepel,
+                 sf,
+                 viridis,
+                 hexbin,
+                 waiter,
+                 tm,
+                 vroom,
+                 cowplot,
+                 visdat,
+                 skimr,
+                 wordcloud, lib = lib_paths()[1])
+
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module( name = "load_data" ) 
