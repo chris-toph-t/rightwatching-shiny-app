@@ -24,9 +24,14 @@ app_server <- function( input, output, session ) {
   
   Sys.setlocale("LC_TIME","de_DE.UTF-8")
   
-  waiting_screen <- tagList(
+  waiting_screen_load <- tagList(
     spin_flower(),
-    h4(paste0("Hallo ", username, ", ich hole Daten")), 
+    h4(paste0("Hallo. Das ist eine Demo, ich hole fake Daten.")), 
+  ) 
+  
+  waiting_screen_report <- tagList(
+    spin_flower(),
+    h4(paste0("Das ist eine Demo, ich baue einen Report aus fake Daten.")), 
   ) 
   
   LoadToEnvironment <- function(RData, env=new.env()) {
@@ -41,7 +46,7 @@ app_server <- function( input, output, session ) {
   observeEvent(input$load, {
     source(file.path("R", "def_plot.R"),  local = TRUE)
     #show spinner when user clicks on input$load
-    waiter_show(html = waiting_screen, color = "grey")
+    waiter_show(html = waiting_screen_load, color = "grey")
     #load the right org file depending on input. this needs to be checked properly: scoping, link to user session, create empty env before loading? 
     load(file.path("data", input$select_org))
 
@@ -193,7 +198,7 @@ app_server <- function( input, output, session ) {
         tempReport <- file.path(tempdir(), "report.Rmd")
         file.copy(file.path("inst", "app", "www", "report.Rmd"), tempReport, overwrite = TRUE)
         
-        waiter_show(html = waiting_screen, color = "grey")
+        waiter_show(html = waiting_screen_report, color = "grey")
         library(rmarkdown)
         render(tempReport,
                output_file = file, 
