@@ -1,4 +1,4 @@
-data-raw/blastula.json
+data/blastula.json
 /data/*
 .RData
 .Rhistory
