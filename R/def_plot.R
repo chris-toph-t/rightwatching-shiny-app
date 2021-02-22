@@ -83,8 +83,8 @@ make_context_map1 <- function(party = input$context_map_option2) {
 
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
-    geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "Blue", lwd=0) +
-    stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
+    geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "black", lwd=0) +
+    stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.1) +
     scale_fill_viridis(option = "C", name = "Vorfälle laut Chronik", direction = -1) +
     labs(alpha = "Bevölkerungsdichte")
 }
