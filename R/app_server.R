@@ -44,6 +44,7 @@ app_server <- function( input, output, session ) {
   w <- Waiter$new(id = c("context_map2"))
   ## Start Tab Load  #####################################################
   observeEvent(input$load, {
+
     source(file.path("R", "def_plot.R"),  local = TRUE)
     #show spinner when user clicks on input$load
     waiter_show(html = waiting_screen_load, color = "grey")
@@ -53,10 +54,11 @@ app_server <- function( input, output, session ) {
     #add filter logic: all following elements will use the filter bounds specified by this function in UI. chornik_filtered is a reactive elements
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
-    chronik_filtered <- reactive(chronik_enriched %>%
-                                   dplyr::filter(date >= input$dates[1],
-                                          date <= input$dates[2])
-                                   )
+    chronik_filtered <- reactive(
+      chronik_enriched %>%
+       dplyr::filter(date >= input$dates[1],
+              date <= input$dates[2])
+                             )
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
                   "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(lat))), "<br>", 
@@ -119,7 +121,8 @@ app_server <- function( input, output, session ) {
     output$context_map_header2 <- renderText({ input$context_map_header2 })
     output$context_map2 <- renderPlot({
       w$show()
-      make_context_map2()})
+      make_context_map2()
+      })
     output$context_map_text2 <- renderText({ input$context_map_text2 })
     
     output$context_map_header3 <- renderText({ input$context_map_header3 })

@@ -34,7 +34,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header2")),
-                   plotOutput('context_map2', height = "600px"),
+                   plotOutput('context_map2', height = "400px"),
                    p(textOutput("context_map_text2"))
                    # ------------------------------------------------------------------------------
          )),
@@ -68,7 +68,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header4")),
-                   plotOutput('context_map4', height = "600px"),
+                   plotOutput('context_map4', height = "400px"),
                    p(textOutput("context_map_text4"))
                    # ------------------------------------------------------------------------------
          )),

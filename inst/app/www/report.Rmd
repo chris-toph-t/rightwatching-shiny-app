@@ -17,14 +17,14 @@ knitr::opts_chunk$set(
 
 ## Überblick
 
-`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat))),"d.h. ", nrow(filter(chronik_filtered(), is.na(lat))), " Vorfälle nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
+`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(lat)))," d.h. ", nrow(filter(chronik_filtered(), is.na(lat))), " nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
 
 
 ### `r input$barchart_header1`
 
 `r input$barchart_text1`
 
-```{r barchart, fig.width=12}
+```{r barchart, fig.width=8}
 make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 ```
 

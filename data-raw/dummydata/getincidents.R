@@ -8,7 +8,8 @@ chronik %>%
   mutate(date = as.Date(lubridate::dmy(date))) %>%
   mutate(month = as.Date(cut.Date(date, breaks = "month"))) %>%
   mutate(year = as.Date(cut.Date(date, breaks = "year"))) %>%
-  mutate(week = as.Date(cut.Date(date, breaks = "week"))) -> chronik
+  mutate(week = as.Date(cut.Date(date, breaks = "week"))) %>%
+  mutate(source_name = source) -> chronik
 
 
 

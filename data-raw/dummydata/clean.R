@@ -2,7 +2,7 @@
 #basic cleaning, taking remove entries without place and create string for geocoding
 chronik %>%
   mutate(placestring = str_replace_all(place, "\\s", "+")) %>%
-  mutate(placestring = paste0(placestring, "+Bayern")) -> chronik_clean
+  mutate(placestring = paste0(placestring, "+Saarland")) -> chronik_clean
 
 #need improvement: what do when multiple sources? take only first mentioned source?
 chronik_clean %>%

@@ -66,7 +66,7 @@ library(futile.logger)
                 rm(list = ls())
                 
 ######################### prepare sequence for dummydata
-                bundesland <- "09"
+                bundesland <- "10"
                 source("00_setup.R")
                 source("dummydata/getincidents.R", verbose = TRUE)
                 source("01_def_geocode.R", verbose = TRUE)

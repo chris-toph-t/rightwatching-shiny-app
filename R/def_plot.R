@@ -56,7 +56,7 @@ make_base_map <- function(baselayer = kreise) {
 make_historic_map <- function(data = historic_filtered) {
   ggplot() +
     geom_sf(data = kreise, aes(geometry = geometry)) +
-    stat_summary_hex(data = filter(data, nsdap_percent_33 < 100), aes(x = lon, y = lat, z = nsdap_percent_33), alpha = 0.9, bins = 30, fun = mean) +
+    stat_summary_hex(data = filter(data, nsdap_percent_33 < 100), aes(x = lon, y = lat, z = nsdap_percent_33), alpha = 0.9, bins = 20, fun = mean) +
     scale_fill_viridis(option = "inferno", direction = -1, name = "NSDAP WählerInnen 1933") +
     #geom_jitter(data = data, aes(x = lon, y = lat, color = source_group, group=source_group), width = 0.05, height = 0.05, size = 0.7) +
     #scale_color_manual(values = c("black", "#1B9E77"), name="Kontaktaufname") +
@@ -84,7 +84,7 @@ make_context_map1 <- function(party = input$context_map_option2) {
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
     geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "black", lwd=0) +
-    stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.1) +
+    stat_bin_hex(data = chronik_filtered(), aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
     scale_fill_viridis(option = "C", name = "Vorfälle laut Chronik", direction = -1) +
     labs(alpha = "Bevölkerungsdichte")
 }
@@ -125,7 +125,7 @@ make_missing_plot <- function() {
 
 make_source_multiple_map <- function() {
   make_base_map(baselayer = kreise) +
-    geom_jitter(data = chronik_filtered(), aes(x = lon, y = lat, color = source_group, group=source_group), width = 0.05, height = 0.05, size = 0.7) +
+    geom_jitter(data = chronik_filtered(), aes(x = lon, y = lat, color = source_group, group=source_group), width = 0.1, height = 0.1, size = 1) +
     #scale_color_manual(values = c("black", "#1B9E77"), name="Kontaktaufname") +
     #geom_label_repel(data = labels, aes(x = longitude_to, y = latitude_to, label = label), nudge_x = 10) +
     coord_sf() +
