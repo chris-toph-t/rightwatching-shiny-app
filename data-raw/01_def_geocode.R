@@ -14,7 +14,7 @@ geocode <- function(place = NULL){
   # transformNomiatim response to json
   response <- 
     tryCatch(
-      fromJSON(html_text(html_node(read_html(request), "p"))), 
+      jsonlite::fromJSON(html_text(html_node(read_html(request), "p"))), 
     error = function(c) return(data.frame())
     )
   # Get lon, Lat, Admin6, admin4 from response
