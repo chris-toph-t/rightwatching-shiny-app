@@ -44,4 +44,6 @@ Once you have these, launch the Shiny app:
         //path/to/this/diectory/data-raw/:/srv/prepare/
         rightwatching-shiny-app
 
-<a href='https://rightwatching.org'><img src='inst/app/www/BMBF_eng.png' align="right" height="139" /></a>
+Sponsored through the Prototype Fund by the German Federal Ministry of Education and Research from September 2020 to February 2021. 
+
+<a href='https://rightwatching.org'><img src='inst/app/www/BMBF_eng.png' align="left" height="139" /></a>
