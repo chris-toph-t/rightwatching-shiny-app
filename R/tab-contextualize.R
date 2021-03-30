@@ -17,7 +17,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header1")),
-                   plotOutput('context_map1', height = "300px"),
+                   plotOutput('context_map1', height = "500"),
                    p(textOutput("context_map_text1"))
                    # ------------------------------------------------------------------------------
          )),
@@ -34,7 +34,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header2")),
-                   plotOutput('context_map2', height = "400px"),
+                   plotOutput('context_map2', height = "600"),
                    p(textOutput("context_map_text2"))
                    # ------------------------------------------------------------------------------
          )),
@@ -43,7 +43,7 @@ tabPanel(title = "Daten im Kontext",
          fluidRow(column(3,
                          # links: -----------------------------------------------------------------------
                          textAreaInput("context_map_header3", "Überschrift", value = "Vorfälle und Anteil ausländischer MitbürgerInnen", rows = 2, resize = "none") %>%
-                           shiny::tagAppendAttributes(style = 'width: 100%;', height = "400px"),
+                           shiny::tagAppendAttributes(style = 'width: 100%;', height = "600"),
                          textAreaInput("context_map_text3", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit dem Anteil ausländischer MitbürgerInnen, Quelle: regionalstatistik.de", rows = 7, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;')
                          
@@ -51,7 +51,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header3")),
-                   plotOutput('context_map3', height = "300px"),
+                   plotOutput('context_map3', height = "500"),
                    p(textOutput("context_map_text3"))
                    # ------------------------------------------------------------------------------
          )),
@@ -68,7 +68,7 @@ tabPanel(title = "Daten im Kontext",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("context_map_header4")),
-                   plotOutput('context_map4', height = "400px"),
+                   plotOutput('context_map4', height = "500"),
                    p(textOutput("context_map_text4"))
                    # ------------------------------------------------------------------------------
          )),

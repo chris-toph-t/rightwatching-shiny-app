@@ -55,13 +55,17 @@ app_server <- function( input, output, session ) {
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
     chronik_filtered <- reactive(chronik_enriched %>%
-                                   dplyr::filter(date >= input$dates[1],
+                                      mutate(date = as.Date(lubridate::ymd(date))) %>%
+                                      mutate(month = as.Date(cut.Date(date, breaks = "month"))) %>%
+                                      mutate(year = as.Date(cut.Date(date, breaks = "year"))) %>%
+                                      mutate(week = as.Date(cut.Date(date, breaks = "week"))) %>%
+                                      filter(date >= input$dates[1],
                                           date <= input$dates[2])
                                    )
 
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
-                  "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(lat))), "<br>", 
+                  "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(latitude))), "<br>", 
                   "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y")
       ))
     })
@@ -97,7 +101,7 @@ app_server <- function( input, output, session ) {
     output$county_timeline_header1 <- renderText({ input$county_timeline_header1 })
     #reactive graph: rdata file -> date1&date2 -> chronik_filtered -> summarised into chornik_by_county. we observe for changes in the latter to adjust allowed select values 
     observeEvent(chronik_by_county(), {
-      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$admin6), selected = unique(chronik_by_county()$admin6)) 
+      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$county), selected = unique(chronik_by_county()$county)) 
     })
     output$county_timeline <- renderPlot({
       #show a message instead of plot when no input selected
@@ -140,7 +144,7 @@ app_server <- function( input, output, session ) {
     # Start of source_multiple map  #####################################################
     output$missing_table_header1 <- renderText({ input$missing_table_header1 })
     chronik_missing <- reactive(chronik_filtered() %>%
-                                  filter(is.na(lat) | is.na(lon)))
+                                  filter(is.na(description)))
     output$missing_table <- shiny::renderDataTable(
                               chronik_missing(), 
                               options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
@@ -161,8 +165,10 @@ app_server <- function( input, output, session ) {
     
     # Start of source_map map  #####################################################
     output$source_map_header1 <- renderText({ input$source_map_header1 })
-    source_map_choices <- unique(chronik_enriched$source_group)
-    updateSelectInput(session, "source_map_option1", choices = source_map_choices) 
+    source_map_choices <- reactive(
+      unique(chronik_filtered()$source_group)
+    )
+    updateSelectInput(session, "source_map_option1", choices = source_map_choices()) 
     output$source_map <- renderPlot({
       make_source_map()
     })
@@ -172,7 +178,7 @@ app_server <- function( input, output, session ) {
     # Start of source_wordcloud  #####################################################
     output$source_wordcloud_header1 <- renderText({ input$source_wordcloud_header1 })
     output$source_wordcloud <- renderPlot({
-      wordcloud::wordcloud(words = filter(chronik_enriched, source_group == input$source_map_option1)$source_name, min.freq = 1)
+      wordcloud::wordcloud(words = filter(chronik_enriched, source_group == input$source_map_option1)$source_name_cleaned, min.freq = 1)
     })
     output$source_wordcloud_text1 <- renderText({ input$source_wordcloud_text1 })
     # End of source_wordcloud############################################################

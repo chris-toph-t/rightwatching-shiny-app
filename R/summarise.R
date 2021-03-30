@@ -5,16 +5,19 @@
 #' @import dplyr
 #' 
 
+
+  
+  
 chronik_by_source_place <- reactive(
   chronik_filtered() %>%
-    group_by(source_group, place, lon, lat) %>%
+    group_by(source_group, city, longitude, latitude) %>%
     summarise(n = n()) %>% 
     ungroup() %>% 
-    unnest(place)  
+    unnest(city)  
 )
 chronik_by_county <- reactive(
   chronik_filtered() %>%
-    group_by(admin6, month) %>%
+    group_by(county, month) %>%
     summarise(n= n())   
 )
  
@@ -27,6 +30,6 @@ chronik_by_source_date <- reactive(
 
 chronik_by_place <- reactive(
   chronik_filtered() %>%
-    group_by(place, lon, lat) %>%
+    group_by(city, longitude, latitude) %>%
     summarise(n = n())   
 )

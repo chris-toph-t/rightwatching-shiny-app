@@ -51,9 +51,9 @@ tabPanel(title = "Daten prüfen",
          # missing start ############################################################'
          fluidRow(column(3,
                          # links: -----------------------------------------------------------------------
-                         textAreaInput("missing_table_header1", "Überschrift", value = "Vorfälle die nicht oder ungenau lokalisiert worden", rows = 2, resize = "none") %>%
+                         textAreaInput("missing_table_header1", "Überschrift", value = "Vorfälle die nicht oder ungenau beschrieben sind", rows = 2, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;'),
-                         textAreaInput("missing_table_text1", "Beschreibung", value = "Beim Geokodieren - der Prozess Orte auf der Karte zu lokalisieren - lief etwas schief. Manchmal liegt es an ungenauen oder doppeldeutigen Ortsangaben.", rows = 7, resize = "none") %>%
+                         textAreaInput("missing_table_text1", "Beschreibung", value = "Chroniken haben manchmal leere Felder. Hier werden Chronikeinträge mit leeren Beschreibungen dargestellt", rows = 7, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;')
                          
                          # ------------------------------------------------------------------------------
