@@ -24,6 +24,7 @@ knitr::opts_chunk$set(
 
 `r input$barchart_text1`
 
+
 ```{r barchart, fig.width=8}
 make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 ```

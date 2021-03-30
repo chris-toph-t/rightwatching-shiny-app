@@ -2,6 +2,5 @@ tabPanel(title = "Einführung",
          id    = "introTab",
          value = "introTab",
          icon  = icon("sign-in-alt"),
-         includeMarkdown(file.path("inst", "app", "www", "intro.md")), 
-         #img(src=file.path("inst", "app", "www", "BMBF_eng.png"), align = "left")
+         includeMarkdown(file.path("inst", "app", "www", "intro.md"))
 )

@@ -54,11 +54,11 @@ app_server <- function( input, output, session ) {
     #add filter logic: all following elements will use the filter bounds specified by this function in UI. chornik_filtered is a reactive elements
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
-    chronik_filtered <- reactive(
-      chronik_enriched %>%
-       dplyr::filter(date >= input$dates[1],
-              date <= input$dates[2])
-                             )
+    chronik_filtered <- reactive(chronik_enriched %>%
+                                   dplyr::filter(date >= input$dates[1],
+                                          date <= input$dates[2])
+                                   )
+
     output$load_text <- renderUI({
       HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
                   "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(lat))), "<br>", 
