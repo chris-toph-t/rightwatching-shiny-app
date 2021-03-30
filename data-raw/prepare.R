@@ -7,6 +7,49 @@ setwd("/srv/prepare/")
 # when not using docker use the following line for working direcotry
 #setwd("data-raw/")
 
+
+
+source("00_setup.R")
+chronicles <- read_csv(file.path("data-raw", "conversion_table_tatortrechts.csv"))
+
+
+for (i in 1:2) {
+  incidents <- readr::read_csv(file.path("..", "data", "tatortrechts.csv"))
+  sources <- readr::read_csv(file.path("..", "data", "sources.csv"))
+  incidents <- incidents %>%
+    left_join(select(sources, source_name = name, source_url = url, source_date = date, id), by = c("id" = "id"))
+  
+  incidents %>%
+    #mutate(source_links = str_remove(source_links, "Quelle:\\s{5}")) %>%
+    mutate(source_name_cleaned = tm::removePunctuation(str_remove(str_extract(source_name, "//.*?(/|$)"), "(//www.|//)"))) %>%
+    mutate(source_group = case_when(grepl("netzgegennazis|antifa|belltowernews|endstationrechts|npdblog", source_name, ignore.case = T) ~ "rechtsaussen", 
+                                    grepl("presseportal|blaulichtatlas|polizei|bka|lka", source_name, ignore.case = TRUE) ~ "Polizei",
+                                    grepl("kleineanfrage|bundestag|parlament|anfrage|drucksache|landtag", source_name, ignore.case = TRUE) ~ "Parlamentarische Anfragen",
+                                    grepl("augenzeug|zeuginnenberichte|zeugen|zeuginnen", source_name, ignore.case = TRUE) ~ "AugenzeugInnen",
+                                    grepl("betroffene", source_name, ignore.case = TRUE) ~ "Betroffene",
+                                    grepl("opp|opferperspektive|leuchtlinie|ezra|RAA|lobbi|reachout|keine randnotiz|opferberatung|m/*power|mobit|amadeu|response", source_name, ignore.case = TRUE) ~ "Org",
+                                    grepl("thüringen24|wdr|rbb24|rbbonline|berlinonline|rbb|express|ndr|dpa|otz|tlz|bild|moz|maz|jenapolis|rponline|
+                                        lokalredaktion|tageblatt|pnr|rias|faz|tag24|welt|szonline|
+                                        rbb|lvz|rundschau|taz|zeitung|allgemeine|anzeiger|news|
+                                        bote|post|chronik|spiegel", source_name, ignore.case = TRUE) ~ "Zeitungen",
+                                    TRUE ~ "Andere"
+    )) -> chronik_clean
+  
+  bundesland <- chronicles$ags[i]
+  chronik_enriched <- chronik_clean %>%
+    filter(chronicler_name == chronicles$chronicler_name[i])
+  source("01_def_geocode.R", verbose = TRUE)  
+  source("02_getexternaldata.R", verbose = TRUE)
+  rm(chronik_clean)
+  rm(incidents)
+  save.image(file = paste0("../data/", tm::removePunctuation(chronicles$chronicler_name[i]), ".RData"))
+  message(i)
+}
+
+
+
+
+
 library(tryCatchLog)
 library(futile.logger)
 
