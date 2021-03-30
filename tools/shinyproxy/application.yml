@@ -3,6 +3,7 @@ proxy:
   port: 8080
   authentication: none
   template-path: ./templates
+  container-wait-time: 30000
   docker:
       internal-networking: true
   specs:
@@ -20,7 +21,7 @@ proxy:
 
 spring:
   mail:
-    host: desdemonia.uberspace.de
+    host: smtp.example.com
     # TLS: 587 SSL: 465 Plain: 25
     port: 587
     username: support@rightwatching.org
