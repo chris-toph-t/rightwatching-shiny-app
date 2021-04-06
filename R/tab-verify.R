@@ -43,7 +43,7 @@ tabPanel(title = "Daten prüfen",
                 column(width = 4,
                         # rechts:-----------------------------------------------------------------------
                         h3(textOutput("source_wordcloud_header1")),
-                        plotOutput('source_wordcloud', height = "500px"),
+                        plotOutput('source_wordcloud', height = "600px"),
                         p(textOutput("source_wordcloud_text1"))
                         # ------------------------------------------------------------------------------
          )),

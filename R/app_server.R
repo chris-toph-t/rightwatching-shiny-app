@@ -26,12 +26,12 @@ app_server <- function( input, output, session ) {
   
   waiting_screen_load <- tagList(
     spin_flower(),
-    h4(paste0("Hallo. Das ist eine Demo, ich hole fake Daten.")), 
+    h4(paste0("Hallo ", username, "! Ich hole Daten.")), 
   ) 
   
   waiting_screen_report <- tagList(
     spin_flower(),
-    h4(paste0("Das ist eine Demo, ich baue einen Report aus fake Daten.")), 
+    h4(paste0("Ich baue einen Bericht, das kann 1-2 Minuten dauern. ")), 
   ) 
   
   LoadToEnvironment <- function(RData, env=new.env()) {
@@ -100,6 +100,7 @@ app_server <- function( input, output, session ) {
     # Start of county_timeline   #####################################################
     output$county_timeline_header1 <- renderText({ input$county_timeline_header1 })
     #reactive graph: rdata file -> date1&date2 -> chronik_filtered -> summarised into chornik_by_county. we observe for changes in the latter to adjust allowed select values 
+    updateSelectInput(session, "county_timeline_option1", choices = NULL, selected = NULL)
     observeEvent(chronik_by_county(), {
       updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$county), selected = unique(chronik_by_county()$county)) 
     })
@@ -119,7 +120,9 @@ app_server <- function( input, output, session ) {
     output$context_map_header1 <- renderText({ input$context_map_header1 })
     output$context_map_option1 <- renderUI({
       selectInput("context_map_option2", "Partei auswählen",unique(dplyr::filter(votes_data, PART04 != "GESAMT")$PART04))})
-    output$context_map1 <- renderPlot({make_context_map1(party = input$context_map_option2)})
+    output$context_map1 <- renderPlot({
+      make_context_map1(party = input$context_map_option2)
+      })
     output$context_map_text1 <- renderText({ input$context_map_text1 })
     
     output$context_map_header2 <- renderText({ input$context_map_header2 })
@@ -144,9 +147,9 @@ app_server <- function( input, output, session ) {
     # Start of source_multiple map  #####################################################
     output$missing_table_header1 <- renderText({ input$missing_table_header1 })
     chronik_missing <- reactive(chronik_filtered() %>%
-                                  filter(is.na(description)))
+                                  filter(is.na(city)))
     output$missing_table <- shiny::renderDataTable(
-                              chronik_missing(), 
+                              select(chronik_missing(), description, date, county, title, latitude, longitude, source_name), 
                               options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
 
     output$missing_plot <- renderPlot({
@@ -165,10 +168,12 @@ app_server <- function( input, output, session ) {
     
     # Start of source_map map  #####################################################
     output$source_map_header1 <- renderText({ input$source_map_header1 })
-    source_map_choices <- reactive(
-      unique(chronik_filtered()$source_group)
-    )
-    updateSelectInput(session, "source_map_option1", choices = source_map_choices()) 
+    observeEvent(chronik_filtered(), {
+      source_map_choices <- reactive(
+        unique(chronik_filtered()$source_group)
+      )  
+      updateSelectInput(session, "source_map_option1", choices = source_map_choices()) 
+    })
     output$source_map <- renderPlot({
       make_source_map()
     })
@@ -178,7 +183,7 @@ app_server <- function( input, output, session ) {
     # Start of source_wordcloud  #####################################################
     output$source_wordcloud_header1 <- renderText({ input$source_wordcloud_header1 })
     output$source_wordcloud <- renderPlot({
-      wordcloud::wordcloud(words = filter(chronik_enriched, source_group == input$source_map_option1)$source_name_cleaned, min.freq = 1)
+      wordcloud::wordcloud(words = filter(chronik_enriched, source_group == input$source_map_option1)$source_name, min.freq = 1)
     })
     output$source_wordcloud_text1 <- renderText({ input$source_wordcloud_text1 })
     # End of source_wordcloud############################################################

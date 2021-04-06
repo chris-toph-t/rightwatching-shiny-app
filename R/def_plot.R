@@ -12,7 +12,7 @@ make_barchart <- function(data = chronik_enriched, level = month) {
     ggplot2::ggplot(aes_string(x=level)) +
     geom_bar() +
     scale_x_date() +
-    theme_ipsum() +
+    theme_transparent() +
     labs(y = "Anzahl Vorfälle", x = level) 
 }
 
@@ -24,7 +24,7 @@ make_county_timeline <- function(data = chronik_by_county, selected_kreise) {
     scale_x_date(date_labels = "%b %y") +
     #scale_color_viridis(discrete = TRUE) +
     facet_wrap(~county) +
-    theme_ipsum() +
+    theme_transparent() +
     theme(legend.position = "none") +
     labs(x = "Monat", y = "Vorfälle")
   
@@ -37,7 +37,7 @@ make_source_timeline <- function(data = chronik_by_source_date) {
     scale_x_date(date_labels = "%b") +
     #scale_color_viridis(discrete = TRUE) +
     labs(x = "Jahr", y = "Vorfälle") + 
-    theme_ipsum() +
+    theme_transparent() +
     theme(legend.position = "bottom") 
 }
 
@@ -50,7 +50,8 @@ make_base_map <- function(baselayer = kreise) {
     coord_sf() + 
     #theme(legend.position = "none") +
     #labs(size = label) + 
-    theme_transparent() 
+    ggthemes::theme_map() +
+    theme(legend.position = "right")
 }
 
 make_historic_map <- function(data = historic_filtered) {
@@ -62,8 +63,8 @@ make_historic_map <- function(data = historic_filtered) {
     #scale_color_manual(values = c("black", "#1B9E77"), name="Kontaktaufname") +
     #geom_label_repel(data = labels, aes(x = longitude_to, y = latitude_to, label = label), nudge_x = 10) +
     coord_sf() +
-    labs(caption = "Wahldaten nach Falter & Hänisch 1990", fill = "NSDAP WählerInnen 1933") +
-    theme_transparent()
+    labs(caption = "Wahldaten nach Falter & Hänisch 1990", fill = "NSDAP % WählerInnen 1933", title = paste0("1933 NSDAP Wahlergebnisse aus ", length(unique(historic_filtered$name)), " Ortschaften")) +
+    ggthemes::theme_map()
 }
 
 make_context_map1 <- function(party = input$context_map_option2) {
@@ -77,26 +78,23 @@ make_context_map1 <- function(party = input$context_map_option2) {
       #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
       geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "black", color = "grey20") +
       scale_fill_viridis(option = "cividis", direction = -1) +
-      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option2, " WählerInnen, %")) +
-      theme(legend.position = "right")
+      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option2, " WählerInnen, %"), caption = "Bundestagswahlergebnisse 2017 laut regionalstatistik.de") 
 }
 
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
     geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "black", lwd=0) +
-    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-    scale_fill_viridis(option = "C", direction = -1, end = 0.8)
-    labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik") +
-    theme(legend.position = "right")
+    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
+    scale_fill_viridis(option = "C", direction = -1, end = 0.8) +
+    labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik", caption = "Bevölkerungsdichte laut Eurostat Gisco") 
 }
 make_context_map3 <- function() {
   make_base_map() +
     geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
     #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "black", color = "grey20") +
+    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "grey30", color = "grey20") +
     scale_fill_viridis(option = "cividis", direction = -1) +
-    labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen") +
-    theme(legend.position = "right")
+    labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen", caption = "AusländerInnenanteil laut regionalstatistik.de") 
 }
 make_context_map4 <- function() {
   pt1 <- make_base_map() +
@@ -114,7 +112,7 @@ make_nationality_barchart <- function() {
   ggplot(data = nationality_data, aes(x = 1, y = value, fill = param_description, group = name)) +
     geom_bar(stat = "identity", position = "fill") +
     scale_y_percent() +
-    theme_ipsum() +
+    theme_transparent() +
     facet_wrap(~name) +
     labs(y = "Prozent", x = "Jahr") 
 
@@ -133,7 +131,7 @@ make_source_multiple_map <- function() {
     coord_sf() +
     labs(caption = "Punkte sind hier nicht genau auf dem Ort des Vorfalls") + 
     facet_wrap(~source_group) + 
-    theme_transparent() + 
+    ggthemes::theme_map() +
     theme(legend.position = "right")
 }
 
@@ -145,7 +143,8 @@ make_source_map <- function() {
     geom_point(data = filter(chronik_by_source_place(), source_group == input$source_map_option1), aes(x = longitude, y = latitude, size = n), fill = "black") +
     coord_sf() +
     labs(size = input$source_map_option1) +
-    theme_transparent()	
+    ggthemes::theme_map() + 
+    theme(legend.position = "right")
   
 }
 
