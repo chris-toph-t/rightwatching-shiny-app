@@ -1,10 +1,9 @@
 
-**ACHTUNG** **Das ist eine Demo. Der Datensatz ist frei erfunden**
-
 ## Einleitung
 
 Dieses Programm stellt Chroniken rechter Gewalt dar, platziert die Daten rechter Gewalt in einem Kontext (Wahlverhalten, Bevölkerungsdichte, etc), erlaubt es diese Daten zu verifizieren (erscheinen sie vollständig?) und generiert Berichte daraus, die NutzerInnen herunterladen können. 
 
+**Dieses Tool nutzt Daten von Beratungsstellen für Betroffene rechter Gewalt. Diese Beratungsstellen sind NICHT für die Methodik dieses Tools verantwortlich.**
 
 
 * Nutze den **<i class="fa fa-table"></i> Daten Laden** Reiter um die Daten zu besorgen. Die Grafiken hier sind vor allem für Publikationen. 
@@ -18,5 +17,5 @@ Dieses Programm stellt Chroniken rechter Gewalt dar, platziert die Daten rechter
 
 Die einzelnen Chroniken werden vom Projekt [Tatort Rechts](https://tatortrechts.de) gesammelt, wir holen sie von Tatort Rechts ab. Diese App konzentriert sich auf Bundesland-spezifische Chroniken, d.h. bundesweite Chroniken sind momentan nicht integriert. 
 
-![Funded by BMBF](BMBF_eng.png)
+![Funded by BMBF](BMBF_de.png)
 
