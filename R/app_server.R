@@ -64,7 +64,7 @@ app_server <- function( input, output, session ) {
                                    )
 
     output$load_text <- renderUI({
-      HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
+      HTML(paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik_enriched), ", diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", 
                   "Davon auf Karte lokalisiert: ", nrow(dplyr::filter(chronik_filtered(), !is.na(latitude))), "<br>", 
                   "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y")
       ))
@@ -149,7 +149,7 @@ app_server <- function( input, output, session ) {
     chronik_missing <- reactive(chronik_filtered() %>%
                                   filter(is.na(city)))
     output$missing_table <- shiny::renderDataTable(
-                              select(chronik_missing(), description, date, county, title, latitude, longitude, source_name), 
+                              select(chronik_missing(), description, date, county, city, title, latitude, longitude, source_name), 
                               options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
 
     output$missing_plot <- renderPlot({
