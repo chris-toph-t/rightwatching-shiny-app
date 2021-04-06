@@ -118,10 +118,9 @@ app_server <- function( input, output, session ) {
     
     ## Start Tab Contextualize  #####################################################
     output$context_map_header1 <- renderText({ input$context_map_header1 })
-    output$context_map_option1 <- renderUI({
-      selectInput("context_map_option2", "Partei auswählen",unique(dplyr::filter(votes_data, PART04 != "GESAMT")$PART04))})
+    updateSelectInput(session, "context_map_option1", choices = unique(dplyr::filter(votes_data, PART04 != "GESAMT")$PART04), selected = "AFD") 
     output$context_map1 <- renderPlot({
-      make_context_map1(party = input$context_map_option2)
+      make_context_map1(party = input$context_map_option1)
       })
     output$context_map_text1 <- renderText({ input$context_map_text1 })
     
@@ -196,8 +195,11 @@ app_server <- function( input, output, session ) {
     ## Start Tab Download  #####################################################
     output$report <- downloadHandler(
       validate(
-        need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen im Tab <b>Daten darstellen</b>!')
+        c(need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen im Tab <b>Daten darstellen</b>!'),
+          need(input$context_map_option1, 'Bitte eine Partei wählen im Tab <b>Daten im Kontext</b>!')
+          )
       ),
+      
       # For PDF output, change this to "report.pdf"
       filename = function() {
         paste('report', sep = '.', switch(

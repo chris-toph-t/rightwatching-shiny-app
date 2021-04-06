@@ -9,7 +9,8 @@ tabPanel(title = "Daten im Kontext",
                          # links: -----------------------------------------------------------------------
                          textAreaInput("context_map_header1", "Überschrift", value = "Vorfälle im Kontext von Bundestagswahlergebnissen", rows = 2, resize = "none") %>%
                                  shiny::tagAppendAttributes(style = 'width: 100%;'),
-                         uiOutput("context_map_option1"),
+                         #uiOutput("context_map_option1"),
+                         selectInput('context_map_option1', 'Partei auswählen', choices = NULL, multiple = FALSE),
                          textAreaInput("context_map_text1", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit Wahlergebnissen laut regionalstatistik.de", rows = 7, resize = "none") %>%
                                  shiny::tagAppendAttributes(style = 'width: 100%;')
                          

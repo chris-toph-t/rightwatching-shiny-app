@@ -67,7 +67,7 @@ make_historic_map <- function(data = historic_filtered) {
     ggthemes::theme_map()
 }
 
-make_context_map1 <- function(party = input$context_map_option2) {
+make_context_map1 <- function(party = input$context_map_option1) {
     kreise %>%
       left_join(select(
         filter(votes_data, PART04 == party), id, vote_percentage), 
@@ -78,7 +78,7 @@ make_context_map1 <- function(party = input$context_map_option2) {
       #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
       geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "black", color = "grey20") +
       scale_fill_viridis(option = "cividis", direction = -1) +
-      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option2, " WählerInnen, %"), caption = "Bundestagswahlergebnisse 2017 laut regionalstatistik.de") 
+      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option1, " WählerInnen, %"), caption = "Bundestagswahlergebnisse 2017 laut regionalstatistik.de") 
 }
 
 make_context_map2 <- function () {

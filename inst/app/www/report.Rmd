@@ -1,5 +1,6 @@
 ---
-title: "Rightwatching Data Report"
+title: "Rightwatching Datenbericht"
+subtitle: "`r input$select_org`"
 author: "`r username`"
 date: "`r Sys.Date()`"
 output: html_document
@@ -44,7 +45,7 @@ make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 ### `r input$context_map_header1`
 `r input$context_map_text1`
 ```{r contextmap1, fig.width=12}
-make_context_map1(party = input$context_map_option2)
+make_context_map1(party = if_else(is.null(input$context_map_option1), "AFD", input$context_map_option1))
 ```
 
 
@@ -96,5 +97,5 @@ make_missing_plot()
 
 ```{r}
 chronik_missing <- chronik_missing()
-knitr::kable(chronik_missing)
+knitr::kable(select(chronik_missing, description, date, county, city, title, latitude, longitude, source_name))
 ```
