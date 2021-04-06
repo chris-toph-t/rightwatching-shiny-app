@@ -29,6 +29,7 @@ RUN Rscript -e 'remotes::install_version("shinythemes",upgrade="never", version 
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.16")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.2.1")'
 RUN Rscript -e 'remotes::install_version("wordcloud",upgrade="never", version = "2.6")'
+RUN Rscript -e 'remotes::install_version("ggthemes",upgrade="never", version = "4.2.4")'
 RUN mkdir /build_zone
 ADD . /build_zone
 WORKDIR /build_zone
