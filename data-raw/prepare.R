@@ -11,14 +11,15 @@ setwd("/srv/prepare/")
 
 source("00_setup.R")
 chronicles <- read_csv(file.path("..", "data", "conversion_table_tatortrechts.csv"))
-
-
 for (i in 1:nrow(chronicles)) {
+  chronicles <- read_csv(file.path("..", "data", "conversion_table_tatortrechts.csv"))
   incidents <- readr::read_csv(file.path("..", "data", "tatortrechts.csv"))
-  sources <- readr::read_csv(file.path("..", "data", "sources.csv"))
+  sources <- readr::read_csv(file.path("..", "data", "sources.csv")) %>%
+    select(-id) %>%
+    dplyr::distinct()
   incidents <- incidents %>%
     left_join(select(sources, source_name = name, source_url = url, source_date = date, rg_id), by = c("rg_id" = "rg_id"))
-  
+
   incidents %>%
     #mutate(source_links = str_remove(source_links, "Quelle:\\s{5}")) %>%
     mutate(source_tld = tm::removePunctuation(str_remove(str_extract(source_name, "//.*?(/|$)"), "(//www.|//)"))) %>%
