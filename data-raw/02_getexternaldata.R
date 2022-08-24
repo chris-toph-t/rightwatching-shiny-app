@@ -8,13 +8,15 @@
     # keep correspondence matches in simple table
     communes %>%
       sf::st_drop_geometry() %>%
-      select(NUTS_CODE, AGS_KREIS_ID) %>%
+      dplyr::select(NUTS_CODE, AGS_KREIS_ID) %>%
       dplyr::distinct() -> nuts_lau_match
     # add AGS/NSI code to kreise and keep only relevant state
-    kreise <- gisco_get_nuts(nuts_level = "3", country = "DEU", resolution = "03", cache = TRUE, update_cache = TRUE) %>%
+    kreise <- gisco_get_nuts(nuts_level = "3", country = "DEU", resolution = "03", cache = TRUE) %>%
       left_join(nuts_lau_match, by = c(NUTS_ID = "NUTS_CODE")) %>%
       filter(str_detect(AGS_KREIS_ID, paste0("^", bundesland))) %>%
       sf::st_as_sf()
+    bundesland_sf <- kreise %>% 
+      summarise()
     #sf::write_sf(kreise, paste0("../data/kreise_", bundesland, ".shp"))
     #Encoding(kreise$NAME_LATN) <- "UTF-8"
 ################################End Get Geo Reference###############################
@@ -24,37 +26,25 @@
 # Download Population data and grid if needed, keep only kreise of current bundesland, normalize pop values with cap of 5000, remove unneeded arge variables
     # Download Bevölkerungsraster 1km
     # https://ec.europa.eu/eurostat/de/web/gisco/geodata/reference-data/population-distribution-demography/geostat#geostat11
-    if (file.exists("../data/georeference/GEOSTAT_grid_POP_1K_2011_V2_0_1.csv") == FALSE) {
-      curl::curl_download(url = "https://ec.europa.eu/eurostat/cache/GISCO/geodatafiles/GEOSTAT-grid-POP-1K-2011-V2-0-1.zip", destfile = "pop.zip")  
+    if (file.exists("../data/georeference/population_deu_2019-07-01_geotiff/population_deu_2019-07-01.tif") == FALSE) {
+      curl::curl_download(url = "https://data.humdata.org/dataset/7d08e2b0-b43b-43fd-a6a6-a308f222cdb2/resource/7c02d6ee-1630-42bb-abcd-90bc7b3fa169/download/population_deu_2019-07-01_geotiff.zip", destfile = "pop.zip")  
       unzip("pop.zip")
       dir.create("../data/georeference/")
-      file.copy(from = "Version 2_0_1/GEOSTAT_grid_POP_1K_2011_V2_0_1.csv", to = "../data/georeference/")
-      file.copy(from = "Version 2_0_1/GEOSTATReferenceGrid", to = "../data/georeference/", recursive = TRUE)
-      unlink("Version 2_0_1", recursive = TRUE)
+      file.copy(from = "population_deu_2019-07-01.tif", to = "../data/georeference/")
+      file.copy(from = "population_deu_2019-07-01.tif.aux.xml", to = "../data/georeference/", recursive = TRUE)
+      #unlink("Version 2_0_1", recursive = TRUE)
       unlink("pop.zip")
     }
-    
+   
     # Process population data
-    
-    read.csv("../data/georeference/GEOSTAT_grid_POP_1K_2011_V2_0_1.csv") -> pop2011
-    read_sf("../data/georeference/GEOSTATReferenceGrid/Grid_ETRS89_LAEA_1K-ref_GEOSTAT_POP_2011_V2_0_1.shp") -> pop2011_ref
-    
-    pop2011_ref %>%
-      left_join(pop2011, by = c(GRD_ID = "GRD_ID")) %>%
-      filter(CNTR_CODE == "DE") -> pop2011
-    #keep population grid only for relevant bundesland
-    st_transform(pop2011, crs = (st_crs(kreise))) -> pop2011
-    st_intersection(kreise, pop2011) -> pop2011_filtered
-    
-    #set cut off value for 5000 to properly show sparsely populated places
-    pop2011_filtered %>%
-      mutate(TOT_P = as.numeric(TOT_P)) %>%
-      mutate(TOT_P = if_else(TOT_P > 5000, 5000, TOT_P)) -> pop2011_filtered
-    
-    #sf::write_sf(pop2011_filtered, paste0("../data/pop2011_", bundesland,".shp"), "pop2011")
-    
-    rm(pop2011)
-    rm(pop2011_ref)
+    # pop_meta <- raster("../data/georeference/population_deu_2019-07-01_geotiff/population_deu_2019-07-01.tif")
+    # 
+    # pop_meta_filtered <- raster::crop(pop_meta, bundesland_sf)
+    pop_meta = read_stars("../data/georeference/population_deu_2019-07-01_geotiff/population_deu_2019-07-01.tif")
+    pop_meta_cropped <- pop_meta[bundesland_sf]
+    names(pop_meta_cropped) <- "pop_density"
+    #pop_meta_cropped <- stars::st_downsample(pop_meta_cropped, n = 10)
+    rm(pop_meta)
 ################################End Get Poplation Data###############################
 
     
@@ -70,12 +60,12 @@
     votes_data <- dg_call(nuts_nr = "3", stat_name = "WAHL09", substat_name = "PART04", year = "2017", parent_chr = bundesland)
     voters_data <- dg_call(nuts_nr = "3", stat_name = "WAHL01", year = "2017", parent_chr = bundesland)
     votes_data <- votes_data %>%
-      left_join(select(voters_data, voters = value, id), by = c("id" = "id")) %>%
+      left_join(dplyr::select(voters_data, voters = value, id), by = c("id" = "id")) %>%
       mutate(vote_percentage = (value/voters)*100)
     # add statistics to kreis shapes
     kreise %>%
       #left_join(select(votes_data, id, vote_percentage), by = c("AGS_KREIS_ID" = "id")) %>%
-      left_join(select(nationality_data_percentage, id, NATA_percentage), by = c("AGS_KREIS_ID" = "id")) -> kreise
+      left_join(dplyr::select(nationality_data_percentage, id, NATA_percentage), by = c("AGS_KREIS_ID" = "id")) -> kreise
     
 #################################End nationality stats data from regionalstatistik##########################
 

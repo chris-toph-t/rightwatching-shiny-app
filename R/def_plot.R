@@ -18,12 +18,12 @@ make_barchart <- function(data = chronik_enriched, level = month) {
 
 make_county_timeline <- function(data = chronik_by_county, selected_kreise) {
   data %>%
-    filter(county %in% selected_kreise) %>%
-    ggplot(aes(x=month, y=n, group=county)) +
+    filter(admin6 %in% selected_kreise) %>%
+    ggplot(aes(x=month, y=n, group=admin6)) +
     geom_line() +
     scale_x_date(date_labels = "%b %y") +
     #scale_color_viridis(discrete = TRUE) +
-    facet_wrap(~county) +
+    facet_wrap(~admin6) +
     theme_transparent() +
     theme(legend.position = "none") +
     labs(x = "Monat", y = "Vorfälle")
@@ -83,7 +83,7 @@ make_context_map1 <- function(party = input$context_map_option1) {
 
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
-    geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "black", lwd=0) +
+    geom_stars(data = pop_meta_cropped, aes(x = x, y = y, alpha = pop_density)) +
     stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
     scale_fill_viridis(option = "C", direction = -1, end = 0.8) +
     labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik", caption = "Bevölkerungsdichte laut Eurostat Gisco") 
@@ -119,7 +119,7 @@ make_nationality_barchart <- function() {
 }
 
 make_missing_plot <- function() {
-  vis_miss(select(chronik_filtered(), description, date, county, city, title, latitude, longitude, source_name)) +
+  vis_miss(select(chronik_filtered(), description, date, admin6, place, title, latitude, longitude, source_name)) +
     labs(y = "Vorfälle", caption = "Vorfälle mit fehlenden Angaben sind hier dargestellt", x = "Vorfallsattribute")
 }
 

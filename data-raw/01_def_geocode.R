@@ -2,8 +2,8 @@
 geocode <- function(place = NULL){
   # NOMINATIM SEARCH API URL
   # use this one if you don't have your own docker nominatim instance
-  #src_url <- "https://nominatim.openstreetmap.org/search?q="
-  src_url <<- "http://nominatim.geocode:8080/search?q="
+  src_url <- "https://nominatim.openstreetmap.org/search?q="
+  #src_url <<- "http://nominatim.geocode:8080/search?q="
   # if more than one field per address, concatenate here
   addr <- place
   # Such-URL erstellen

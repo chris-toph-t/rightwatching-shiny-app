@@ -4,7 +4,7 @@ knitr::opts_chunk$set(dev.args=list(bg="transparent"))
 library(librarian)
 shelf(CorrelAid/datenguideR, hrbrthemes, viridis, readxl, jsonlite, tidyverse, lubridate, osmdata, 
       ggspatial, sp, htmltools, rvest, xml2, quanteda, ggrepel, sf, wordcloud, httr, giscoR, tidyr, 
-      tryCatchLog, futile.logger, haven, knitr, blastula, lib = lib_paths()[1])
+      tryCatchLog, futile.logger, haven, knitr, blastula, raster, stars, lib = lib_paths()[1])
 
 Sys.setlocale("LC_TIME","de_DE.UTF-8")
 

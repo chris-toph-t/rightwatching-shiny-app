@@ -2,7 +2,7 @@
 #basic cleaning, taking remove entries without place and create string for geocoding
 chronik %>%
   filter(!is.na(place)) %>%
-  select(-descr) %>%
+  dplyr::select(-descr) %>%
   mutate(place = str_remove(place, "\\s\\(.*\\)")) %>%
   mutate(placestring = str_replace_all(place, "\\s", "+")) %>%
   mutate(placestring = paste0(placestring, "+Hessen")) -> chronik_clean
@@ -28,9 +28,10 @@ for (i in 1:length(map_chronik$placestring)) {
   map_chronik$lon[i] <- result$lon
   map_chronik$admin6[i] <- as.character(result$admin6)
   message(i)
+  Sys.sleep(1)
 }
 
 
 #bring lon, lat, admin6 back into original data. not very elegant
 chronik_clean %>%
-  left_join(select(map_chronik, -n), by = c(placestring = "placestring")) -> chronik_enriched
+  left_join(dplyr::select(map_chronik, -n), by = c(placestring = "placestring")) -> chronik_enriched
