@@ -14,6 +14,7 @@
 #' @import tm
 #' @import cowplot
 #' @import ggplot2
+#' @import stars
 #' @noRd
 
 #library(shinythemes, hexbin, waiter, dplyr)
@@ -55,10 +56,12 @@ app_server <- function( input, output, session ) {
     updateDateRangeInput(session, "dates", start = min(chronik_enriched$date), end = max(chronik_enriched$date))
     
     chronik_filtered <- reactive(chronik_enriched %>%
-                                      mutate(date = as.Date(lubridate::ymd(date))) %>%
+                                      mutate(date = as.Date(date)) %>% 
                                       mutate(month = as.Date(cut.Date(date, breaks = "month"))) %>%
                                       mutate(year = as.Date(cut.Date(date, breaks = "year"))) %>%
                                       mutate(week = as.Date(cut.Date(date, breaks = "week"))) %>%
+                                      rename(latitude = lat) %>% 
+                                      rename(longitude = lon) %>% 
                                       filter(date >= input$dates[1],
                                           date <= input$dates[2])
                                    )
@@ -102,7 +105,7 @@ app_server <- function( input, output, session ) {
     #reactive graph: rdata file -> date1&date2 -> chronik_filtered -> summarised into chornik_by_county. we observe for changes in the latter to adjust allowed select values 
     updateSelectInput(session, "county_timeline_option1", choices = NULL, selected = NULL)
     observeEvent(chronik_by_county(), {
-      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$county), selected = unique(chronik_by_county()$county)) 
+      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$admin6), selected = unique(chronik_by_county()$admin6)) 
     })
     output$county_timeline <- renderPlot({
       #show a message instead of plot when no input selected
@@ -146,9 +149,9 @@ app_server <- function( input, output, session ) {
     # Start of source_multiple map  #####################################################
     output$missing_table_header1 <- renderText({ input$missing_table_header1 })
     chronik_missing <- reactive(chronik_filtered() %>%
-                                  filter(is.na(city)))
+                                  filter(is.na(place)))
     output$missing_table <- shiny::renderDataTable(
-                              select(chronik_missing(), description, date, county, city, title, latitude, longitude, source_name), 
+                              select(chronik_missing(), description, date, admin6, place, title, latitude, longitude, source_name), 
                               options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
 
     output$missing_plot <- renderPlot({

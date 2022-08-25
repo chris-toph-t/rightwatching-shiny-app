@@ -30,6 +30,7 @@ usethis::use_package( "cowplot" )
 usethis::use_package( "visdat" )
 usethis::use_package( "skimr" )
 usethis::use_package( "wordcloud" )
+usethis::use_package( "stars" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
