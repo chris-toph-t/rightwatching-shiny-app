@@ -119,7 +119,7 @@ make_nationality_barchart <- function() {
 }
 
 make_missing_plot <- function() {
-  vis_miss(select(chronik_filtered(), description, date, admin6, place, title, latitude, longitude, source_name)) +
+  vis_miss(select(chronik_filtered(), descr_text, date, admin6, place, title, latitude, longitude, source_name)) +
     labs(y = "Vorfälle", caption = "Vorfälle mit fehlenden Angaben sind hier dargestellt", x = "Vorfallsattribute")
 }
 
@@ -138,7 +138,7 @@ make_source_multiple_map <- function() {
 make_source_map <- function() {
   ggplot() +
     geom_sf(data = kreise, aes(geometry = geometry), fill = "grey60") +
-    stat_bin_hex(data = chronik_enriched, aes(x = longitude, y = latitude), alpha = 0.9, binwidth = 0.05) +
+    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude), alpha = 0.9, binwidth = 0.05) +
     scale_fill_viridis(option = "inferno", direction = -1, name = "Vorfälle in Chronik") +
     geom_point(data = filter(chronik_by_source_place(), source_group == input$source_map_option1), aes(x = longitude, y = latitude, size = n), fill = "black") +
     coord_sf() +

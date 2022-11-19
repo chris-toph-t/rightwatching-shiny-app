@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Überblick
 
-`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik_enriched), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(city)))," d.h. ", nrow(filter(chronik_filtered(), is.na(city))), " nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
+`r paste0("Vorfälle in der Chronik gefunden: ", nrow(chronik_enriched), ". <br>Diese Analyse nutzt ", nrow(chronik_filtered()), "<br>", "Davon auf Karte lokalisiert: ", nrow(filter(chronik_filtered(), !is.na(place)))," d.h. ", nrow(filter(chronik_filtered(), is.na(place))), " nicht lokalisiert.<br>", "Vom ", format.Date(min(chronik_filtered()$date), "%d.%m.%Y"), " bis ", format.Date(max(chronik_filtered()$date), "%d.%m.%Y"), ".")`
 
 
 ### `r input$barchart_header1`
@@ -52,7 +52,7 @@ make_context_map1(party = if_else(is.null(input$context_map_option1), "AFD", inp
 ### `r input$context_map_header2`
 `r input$context_map_text2`
 ```{r contextmap2, fig.width=12}
-make_context_map2()
+#make_context_map2()
 ```
 
 
@@ -97,5 +97,5 @@ make_missing_plot()
 
 ```{r}
 chronik_missing <- chronik_missing()
-knitr::kable(select(chronik_missing, description, date, county, city, title, latitude, longitude, source_name))
+knitr::kable(select(chronik_missing, descr_text, date, admin6, place, title, latitude, longitude, source_name))
 ```
