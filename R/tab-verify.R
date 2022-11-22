@@ -1,7 +1,7 @@
 tabPanel(title = "Daten prüfen",
          id    = "verifyTab",
          value = "verifyTab",
-         icon  = icon("search"),
+         icon  = icon("magnifying-glass"),
          
          # source_multiple start ############################################################'
          fluidRow(column(3,

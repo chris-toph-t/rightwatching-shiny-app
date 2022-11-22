@@ -3,13 +3,90 @@
 # each folder has scripts specific to the chronicle
 
 
-setwd("/srv/prepare/")
+#setwd("/srv/prepare/")
 # when not using docker use the following line for working direcotry
-#setwd("data-raw/")
+setwd("data-raw/")
 
 
 
 source("00_setup.R")
+
+######################### prepare sequence for hessen
+bundesland <- "06"
+source("00_setup.R")
+source("hessen/getincidents.R", verbose = TRUE)
+source("01_def_geocode.R", verbose = TRUE)
+source("02_getexternaldata.R", verbose = TRUE)
+print("Got all external data")
+#message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
+source("hessen/clean.R", verbose = TRUE)
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
+# to be added later
+#source("hessen/textmining.R", verbose = TRUE)
+#message("I just textmined the hell out of all this")
+save.image(file = "../data/hessenschauthin.RData")
+message("saved all Hessen data on host, ", nrow(chronik_enriched), " incidents")
+sendstatus()
+rm(list = ls())
+
+
+
+########################## prepare sequence for baden wuerttemberg
+bundesland <- "08"
+source("00_setup.R")
+source("bawue/getincidents.R")
+source("01_def_geocode.R", verbose = TRUE)
+source("02_getexternaldata.R", verbose = TRUE)
+message("Got all external data")
+#message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
+source("bawue/clean.R")
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
+# to be added later
+#source("bawue/textmining.R")
+#message("I just textmined the hell out of all this")
+save.image(file = "../data/leuchtlinie.RData")
+message("saved all BaWue data on host, ", nrow(chronik_enriched), " incidents")
+sendstatus()
+rm(list = ls())
+
+########################## prepare sequence for Mecklenburg Vorpommern
+bundesland <- "13"
+source("00_setup.R")
+source("mecklenburg/getincidents.R")
+source("01_def_geocode.R", verbose = TRUE)
+source("02_getexternaldata.R", verbose = TRUE)
+message("Got all external data")
+#message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
+source("mecklenburg/clean.R")
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
+# to be added later
+#source("mecklenburg/textmining.R")
+#message("I just textmined the hell out of all this")
+save.image(file = "../data/lobbi.RData")
+message("saved all Mecklenburg data on host, ", nrow(chronik_enriched), " incidents")
+sendstatus()
+rm(list = ls())
+
+
+#EZRA is not well develpoed yet, needs cleaning and refining. taking mobit for now
+bundesland <- "16"
+source("00_setup.R")
+source("thueringen_mobit//getincidents.R")
+source("01_def_geocode.R", verbose = TRUE)
+source("02_getexternaldata.R", verbose = TRUE)
+message("Got all external data")
+#message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
+source("thueringen_mobit//clean.R")
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
+# to be added later
+#source("mecklenburg/textmining.R")
+#message("I just textmined the hell out of all this")
+save.image(file = "../data/mobit.RData")
+message("saved all Thueringen Mobit data on host, ", nrow(chronik_enriched), " incidents")
+sendstatus()
+rm(list = ls())
+
+
 chronicles <- read_csv(file.path("..", "data", "conversion_table_tatortrechts.csv"))
 for (i in 1:nrow(chronicles)) {
   chronicles <- read_csv(file.path("..", "data", "conversion_table_tatortrechts.csv"))
@@ -49,82 +126,3 @@ for (i in 1:nrow(chronicles)) {
   rm(list = ls())
 }
 
-
-
-
-
-library(tryCatchLog)
-library(futile.logger)
-
-######################### prepare sequence for hessen
-                bundesland <- "06"
-                source("00_setup.R")
-                source("hessen/getincidents.R", verbose = TRUE)
-                source("01_def_geocode.R", verbose = TRUE)
-                source("02_getexternaldata.R", verbose = TRUE)
-                print("Got all external data")
-                #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
-                source("hessen/clean.R", verbose = TRUE)
-                message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
-                # to be added later
-                #source("hessen/textmining.R", verbose = TRUE)
-                #message("I just textmined the hell out of all this")
-                save.image(file = "../data/hessenschauthin.RData")
-                message("saved all Hessen data on host, ", nrow(chronik_enriched), " incidents")
-                sendstatus()
-                rm(list = ls())
- 
-
-########################## prepare sequence for baden wuerttemberg
-                bundesland <- "08"
-                source("00_setup.R")
-                source("bawue/getincidents.R")
-                source("01_def_geocode.R", verbose = TRUE)
-                source("02_getexternaldata.R", verbose = TRUE)
-                message("Got all external data")
-                #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
-                source("bawue/clean.R")
-                message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
-                # to be added later
-                #source("bawue/textmining.R")
-                #message("I just textmined the hell out of all this")
-                save.image(file = "../data/leuchtlinie.RData")
-                message("saved all BaWue data on host, ", nrow(chronik_enriched), " incidents")
-                sendstatus()
-                rm(list = ls())
-                
-########################## prepare sequence for Mecklenburg Vorpommern
-                bundesland <- "13"
-                source("00_setup.R")
-                source("mecklenburg/getincidents.R")
-                source("01_def_geocode.R", verbose = TRUE)
-                source("02_getexternaldata.R", verbose = TRUE)
-                message("Got all external data")
-                #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
-                source("mecklenburg/clean.R")
-                message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
-                # to be added later
-                #source("mecklenburg/textmining.R")
-                #message("I just textmined the hell out of all this")
-                save.image(file = "../data/lobbi.RData")
-                message("saved all Mecklenburg data on host, ", nrow(chronik_enriched), " incidents")
-                sendstatus()
-                rm(list = ls())
-                
-######################### prepare sequence for dummydata
-                bundesland <- "10"
-                source("00_setup.R")
-                source("dummydata/getincidents.R", verbose = TRUE)
-                source("01_def_geocode.R", verbose = TRUE)
-                source("02_getexternaldata.R", verbose = TRUE)
-                print("Got all external data")
-                #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
-                source("dummydata/clean.R", verbose = TRUE)
-                message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(lat))), "incidents"))
-                # to be added later
-                #source("dummydata/textmining.R", verbose = TRUE)
-                #message("I just textmined the hell out of all this")
-                save.image(file = "../data/dummydata.RData")
-                message("saved all Dummy data on host, ", nrow(chronik_enriched), " incidents")
-                sendstatus()
-                rm(list = ls())

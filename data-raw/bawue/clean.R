@@ -17,13 +17,19 @@ chronik_clean %>%
   )) -> chronik_clean
 
 
-map_chronik <- chronik_clean %>% dplyr::group_by(placestring) %>% dplyr::summarise(n = n()) %>% ungroup
+map_chronik <- chronik_clean %>% dplyr::group_by(placestring) %>% 
+  dplyr::summarise(n = n()) %>% 
+  ungroup %>% 
+  add_column(lat = as.numeric(NA)) %>% 
+  add_column(lon = as.numeric(NA)) %>% 
+  add_column(admin6 = as.character(NA))
+
 #do the actual geocoding
 for (i in 1:length(map_chronik$placestring)) {
   result <- geocode(map_chronik$placestring[i])
   map_chronik$lat[i] <- result$lat
   map_chronik$lon[i] <- result$lon
-  map_chronik$admin6[i] <- as.character(result$admin6)
+  map_chronik$admin6[i] <- result$admin6
   message(i)
 }
 

@@ -1,7 +1,7 @@
 tabPanel(title = "Daten darstellen & beschreiben",
          id    = "visualizeTab",
          value = "visualizeTab",
-         icon  = icon("bar-chart"),
+         icon  = icon("chart-column"),
          # barchart start ############################################################'
          fluidRow(column(3,
                          # links: -----------------------------------------------------------------------

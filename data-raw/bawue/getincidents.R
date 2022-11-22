@@ -52,7 +52,7 @@ page_scrape <- function(i) {
   temp <- tibble(title, date, descr_text, place, source_links)
   chronik <<- rbind(chronik, temp)
 }
-
+print(paste0("Max pages: ", maxPages))
 # here scraping starts, be nice and keep the sleep time between 1 and 2 seconds
 for (i in 1:maxPages) {
   page_scrape(i)
