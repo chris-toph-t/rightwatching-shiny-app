@@ -119,7 +119,7 @@ make_nationality_barchart <- function() {
 }
 
 make_missing_plot <- function() {
-  vis_miss(select(chronik_filtered(), description, date, county, city, title, latitude, longitude, source_name)) +
+  vis_miss(select(chronik_filtered(), description, date, county, city, latitude, longitude, source_name)) +
     labs(y = "Vorfälle", caption = "Vorfälle mit fehlenden Angaben sind hier dargestellt", x = "Vorfallsattribute")
 }
 

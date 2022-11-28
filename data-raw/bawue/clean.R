@@ -37,3 +37,8 @@ for (i in 1:length(map_chronik$placestring)) {
 #bring lon, lat, admin6 back into original data. not very elegant
 chronik_clean %>%
   left_join(select(map_chronik, -n), by = c(placestring = "placestring")) -> chronik_enriched
+
+# be really explicit: app expects, city, description, date, title, longitude, latitude, source_group, source_name, county
+chronik_enriched <- chronik_enriched %>% 
+  rename(city = place) %>% 
+  rename(description = descr_text)

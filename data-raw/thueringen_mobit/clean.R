@@ -7,15 +7,13 @@ chronik %>%
 #need improvement: what do when multiple sources? take only first mentioned source?
 chronik_clean %>%
   mutate(source = str_remove(source, "Quelle:\\s*")) %>%
-  tidyr::separate(source, sep = ", ", into = c("source_1", "source_2", "source_3", "source_4", "source_5"), remove = FALSE)  %>%
-  mutate(source_group = case_when(grepl("antifa|endstation", source_1, ignore.case = T) ~ "SzenebeobachterInnen", 
-                                  grepl("polizei", source_1, ignore.case = TRUE) ~ "Polizei",
-                                  grepl("lobbi", source_1, ignore.case = TRUE) ~ "LOBBI",
-                                  grepl("nordkurier|presse|thüringen24|wdr|rbb24|rbbonline|
-                                        berlinonline|rbb|express|ndr|dpa|otz|tlz|bild|moz|maz|jenapolis|rponline|
-                                        lokalredaktion|tageblatt|pnr|rias|faz|tag24|welt|szonline|
-                                        rbb|lvz|rundschau|taz|zeitung|allgemeine|anzeiger|news|
-                                        bote|post|chronik|spiegel|ostseezeitung|morgenpost|tagesspiegel|nachrichten|tagesschau", source_1, ignore.case = TRUE) ~ "Zeitungen",
+  mutate(source_group = case_when(grepl("augenzeug", source, ignore.case = T) ~ "Augenzeugen",
+                                  grepl("mobit", source, ignore.case = TRUE) ~ "MOBIT",
+                                  grepl("ezra", source, ignore.case = TRUE) ~ "EZRA",
+                                  grepl("polizei|lfv|verfassungsschutz", source, ignore.case = TRUE) ~ "Polizei/LfV",
+                                  grepl("TA|TLZ|OTZ|mdr|lvz|Zeit\\s?Online|Thüringen24|wdr|thueringen24|jenatv|Thüringer\\sAllgemeine|	
+Ostthüringer\\sZeitung|nnz|faz|DIE\\sWELT|Thüringen\\s24|Thüringische\\sLandeszeitung|inSüdthüringen|Deutschlandfunk|ntv|Süddeutsche\\sZeitung|Stern|spiegel", source, ignore.case = TRUE) ~ "Presse",
+                                  grepl("facebook|twitter|Social Media|soziale Medien|youtube", source, ignore.case = TRUE) ~ "Soziale Medien",
                                   TRUE ~ "Andere"
   )) -> chronik_clean
 
@@ -34,3 +32,9 @@ for (i in 1:length(map_chronik$placestring)) {
 #bring lon, lat, admin6 back into original data. not very elegant
 chronik_clean %>%
   left_join(select(map_chronik, -n), by = c(placestring = "placestring")) -> chronik_enriched
+
+# be really explicit: app expects, city, description, date, title, longitude, latitude, source_group, source_name, county
+chronik_enriched <- chronik_enriched %>%
+  rename(city = place, description = paragraph, latitude = lat, longitude = lon, county = admin6, source_name = source, date = datum) %>% 
+  filter(!is.na(date))
+

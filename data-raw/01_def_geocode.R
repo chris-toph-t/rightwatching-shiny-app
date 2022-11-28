@@ -13,6 +13,7 @@ geocode <- function(place = NULL){
     answer %>% 
       filter(importance == max(answer$importance)) %>% 
       unnest(cols = c(address)) %>% 
+      mutate(county = {if("county" %in% names(.)) county else {if("city" %in% names(.)) city else town}}) %>% 
       mutate(lat = as.numeric(lat)) %>% 
       mutate(lon = as.numeric(lon)) %>% 
       select(lat, lon, admin4 = state, admin6 = county) %>% 
