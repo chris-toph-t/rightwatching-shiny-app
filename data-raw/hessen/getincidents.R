@@ -24,7 +24,7 @@ chronik %>%
     html_nodes(webpage, "a") %>%
       html_attr("href") 
   })) %>%
-  mutate(sources = lapply(.$descr, function(x) {
+  mutate(source_name = lapply(.$descr, function(x) {
     webpage <- read_html(x)
     html_nodes(webpage, "a") %>%
       html_text() 

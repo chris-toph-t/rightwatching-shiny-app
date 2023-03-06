@@ -78,21 +78,21 @@ make_context_map1 <- function(party = input$context_map_option1) {
       #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
       geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "black", color = "grey20") +
       scale_fill_viridis(option = "cividis", direction = -1) +
-      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option1, " WählerInnen, %"), caption = "Bundestagswahlergebnisse 2017 laut regionalstatistik.de") 
+      labs(size = "Vorfälle laut Chronik", alpha = paste0(input$context_map_option1, " WählerInnen, %"), caption = "Bundestagswahlergebnisse 2021 laut regionalstatistik.de") 
 }
 
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
-    geom_sf(data = pop2011_filtered, aes(alpha = TOT_P), fill = "black", lwd=0) +
-    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05) +
+    geom_sf(data = popkontur_filtered, aes(alpha = population), fill = "black", lwd=0, color = NA) +
+    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05, lwd = 0) +
     scale_fill_viridis(option = "C", direction = -1, end = 0.8) +
-    labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik", caption = "Bevölkerungsdichte laut Eurostat Gisco") 
+    labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik", caption = "Bevölkerungsdichte 2022 laut Kontur") 
 }
 make_context_map3 <- function() {
   make_base_map() +
     geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
     #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "grey30", color = "grey20") +
+    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "grey30", color = "grey80") +
     scale_fill_viridis(option = "cividis", direction = -1) +
     labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen", caption = "AusländerInnenanteil laut regionalstatistik.de") 
 }
@@ -131,7 +131,7 @@ make_source_multiple_map <- function() {
     coord_sf() +
     labs(caption = "Punkte sind hier nicht genau auf dem Ort des Vorfalls") + 
     facet_wrap(~source_group) + 
-    ggthemes::theme_map() +
+    theme_void() +
     theme(legend.position = "right")
 }
 

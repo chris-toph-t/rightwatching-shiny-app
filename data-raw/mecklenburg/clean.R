@@ -13,28 +13,5 @@ chronik_clean %>%
                                   grepl("lobbi", source_1, ignore.case = TRUE) ~ "LOBBI",
                                   grepl("nachrichten|kurier|zeitung|ticker|dpa|abendblatt|redaktion|reporter", source_1, ignore.case = TRUE) ~ "Zeitungen",
                                   TRUE ~ "Andere"
-  )) -> chronik_clean
-
-
-map_chronik <- chronik_clean %>% dplyr::group_by(placestring) %>% dplyr::summarise(n = n()) %>% ungroup
-#do the actual geocoding
-for (i in 1:length(map_chronik$placestring)) {
-  result <- geocode(map_chronik$placestring[i])
-  map_chronik$lat[i] <- result$lat
-  map_chronik$lon[i] <- result$lon
-  map_chronik$admin6[i] <- as.character(result$admin6)
-  message(i)
-}
-
-
-#bring lon, lat, admin6 back into original data. not very elegant
-chronik_clean %>%
-  left_join(select(map_chronik, -n), by = c(placestring = "placestring")) -> chronik_enriched
-
-# be really explicit: app expects, city, description, date, title, longitude, latitude, source_group, source_name, county
-chronik_enriched <- chronik_enriched %>% 
-  rename(city = place) %>% 
-  rename(description = descr_text) %>% 
-  rename(longitude = lon) %>% 
-  rename(latitude = lat)
-
+  )) %>% 
+  dplyr::select(-county) -> chronik_clean

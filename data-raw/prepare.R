@@ -20,6 +20,7 @@ source("02_getexternaldata.R", verbose = TRUE)
 print("Got all external data")
 #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
 source("hessen/clean.R", verbose = TRUE)
+source("04_wrapup.R", verbose = TRUE)
 message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), "incidents"))
 # to be added later
 #source("hessen/textmining.R", verbose = TRUE)
@@ -40,7 +41,8 @@ source("02_getexternaldata.R", verbose = TRUE)
 message("Got all external data")
 #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
 source("bawue/clean.R")
-message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), "incidents"))
+source("04_wrapup.R", verbose = TRUE)
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), " incidents"))
 # to be added later
 #source("bawue/textmining.R")
 #message("I just textmined the hell out of all this")
@@ -58,7 +60,8 @@ source("02_getexternaldata.R", verbose = TRUE)
 message("Got all external data")
 #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
 source("mecklenburg/clean.R")
-message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), "incidents"))
+source("04_wrapup.R", verbose = TRUE)
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), " incidents"))
 # to be added later
 #source("mecklenburg/textmining.R")
 #message("I just textmined the hell out of all this")
@@ -68,7 +71,7 @@ sendstatus()
 rm(list = ls())
 
 
-#EZRA is not well develpoed yet, needs cleaning and refining. taking mobit for now
+#MOBIT
 bundesland <- "16"
 source("00_setup.R")
 source("thueringen_mobit//getincidents.R")
@@ -77,12 +80,33 @@ source("02_getexternaldata.R", verbose = TRUE)
 message("Got all external data")
 #message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
 source("thueringen_mobit//clean.R")
+source("04_wrapup.R", verbose = TRUE)
 message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), "incidents"))
 # to be added later
 #source("mecklenburg/textmining.R")
 #message("I just textmined the hell out of all this")
 save.image(file = "../data/mobit.RData")
 message("saved all Thueringen Mobit data on host, ", nrow(chronik_enriched), " incidents")
+sendstatus()
+rm(list = ls())
+
+
+#EZRA 
+bundesland <- "16"
+source("00_setup.R")
+source("thueringen//getincidents.R")
+source("01_def_geocode.R", verbose = TRUE)
+source("02_getexternaldata.R", verbose = TRUE)
+message("Got all external data")
+#message(paste0("I'm about to send lots of requests to this server for geocoding: ", src_url))
+source("thueringen//clean.R")
+source("04_wrapup.R", verbose = TRUE)
+message(paste0("I have not found geolocation for ", nrow(filter(chronik_enriched, is.na(latitude))), "incidents"))
+# to be added later
+#source("mecklenburg/textmining.R")
+#message("I just textmined the hell out of all this")
+save.image(file = "../data/ezra.RData")
+message("saved all Thueringen EZRA data on host, ", nrow(chronik_enriched), " incidents")
 sendstatus()
 rm(list = ls())
 

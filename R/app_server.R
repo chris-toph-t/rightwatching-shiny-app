@@ -135,9 +135,9 @@ app_server <- function( input, output, session ) {
     output$context_map3 <- renderPlot({make_context_map3()})
     output$context_map_text3 <- renderText({ input$context_map_text3 })
     
-    output$context_map_header4 <- renderText({ input$context_map_header4 })
-    output$context_map4 <- renderPlot({make_context_map4()})
-    output$context_map_text4 <- renderText({ input$context_map_text4 })
+    # output$context_map_header4 <- renderText({ input$context_map_header4 })
+    # output$context_map4 <- renderPlot({make_context_map4()})
+    # output$context_map_text4 <- renderText({ input$context_map_text4 })
     ## End Tab Contextualize  #####################################################
     
     

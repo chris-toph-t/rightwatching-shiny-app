@@ -77,6 +77,6 @@ for (i in 1:incident_nb){
 
 chronik <- mobitdata %>%
   mutate(datum = lubridate::dmy(datum)) %>%
-  rename(source = quelle)
+  rename(source_name = quelle, descr_text = paragraph, date = datum)
 
 

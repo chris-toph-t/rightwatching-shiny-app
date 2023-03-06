@@ -57,22 +57,22 @@ tabPanel(title = "Daten im Kontext",
                    # ------------------------------------------------------------------------------
          )),
          # foreigner map end ############################################################
-         # nsdap map start ############################################################
-         fluidRow(column(3,
-                         # links: -----------------------------------------------------------------------
-                         textAreaInput("context_map_header4", "Überschrift", value = "Vorfälle im historischen Kontext", rows = 2, resize = "none") %>%
-                           shiny::tagAppendAttributes(style = 'width: 100%;'),
-                         textAreaInput("context_map_text4", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit dem Anteil NSDAP Wählender 1933, Quelle: Falter et al 1992", rows = 7, resize = "none") %>%
-                           shiny::tagAppendAttributes(style = 'width: 100%;')
-                         
-                         # ------------------------------------------------------------------------------
-         ), column(width = 9,
-                   # rechts:-----------------------------------------------------------------------
-                   h3(textOutput("context_map_header4")),
-                   plotOutput('context_map4', height = "500"),
-                   p(textOutput("context_map_text4"))
-                   # ------------------------------------------------------------------------------
-         )),
+         # # nsdap map start ############################################################
+         # fluidRow(column(3,
+         #                 # links: -----------------------------------------------------------------------
+         #                 textAreaInput("context_map_header4", "Überschrift", value = "Vorfälle im historischen Kontext", rows = 2, resize = "none") %>%
+         #                   shiny::tagAppendAttributes(style = 'width: 100%;'),
+         #                 textAreaInput("context_map_text4", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit dem Anteil NSDAP Wählender 1933, Quelle: Falter et al 1992", rows = 7, resize = "none") %>%
+         #                   shiny::tagAppendAttributes(style = 'width: 100%;')
+         #                 
+         #                 # ------------------------------------------------------------------------------
+         # ), column(width = 9,
+         #           # rechts:-----------------------------------------------------------------------
+         #           h3(textOutput("context_map_header4")),
+         #           plotOutput('context_map4', height = "500"),
+         #           p(textOutput("context_map_text4"))
+         #           # ------------------------------------------------------------------------------
+         # )),
          # nsdap map end ############################################################
          
 )
