@@ -101,15 +101,15 @@ app_server <- function( input, output, session ) {
     output$county_timeline_header1 <- renderText({ input$county_timeline_header1 })
     #reactive graph: rdata file -> date1&date2 -> chronik_filtered -> summarised into chornik_by_county. we observe for changes in the latter to adjust allowed select values 
     updateSelectInput(session, "county_timeline_option1", choices = NULL, selected = NULL)
-    observeEvent(chronik_by_county(), {
-      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_by_county()$county), selected = unique(chronik_by_county()$county)) 
+    observeEvent(chronik_filtered(), {
+      updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_filtered()$county), selected = unique(chronik_filtered()$county)) 
     })
     output$county_timeline <- renderPlot({
       #show a message instead of plot when no input selected
       validate(
         need(input$county_timeline_option1, 'Bitte mindestens einen Landkreis aussuchen!')
       )
-      make_county_timeline(data = chronik_by_county(), selected_kreise = input$county_timeline_option1) 
+      make_county_timeline(data = chronik_filtered(), selected_kreise = input$county_timeline_option1, level = input$barchart_option1) 
     })
     output$county_timeline_text1 <- renderText({ input$county_timeline_text })
     # End of county_timeline############################################################
@@ -146,7 +146,7 @@ app_server <- function( input, output, session ) {
     # Start of source_multiple map  #####################################################
     output$missing_table_header1 <- renderText({ input$missing_table_header1 })
     chronik_missing <- reactive(chronik_filtered() %>%
-                                  filter(is.na(city)))
+                                  filter(is.na(city) | is.na(description) | is.na(source_name)))
     output$missing_table <- shiny::renderDataTable(
                               select(chronik_missing(), description, date, county, city, title, latitude, longitude, source_name), 
                               options = list(pageLength = 5, autoWidth = FALSE), escape = FALSE)
@@ -161,7 +161,7 @@ app_server <- function( input, output, session ) {
     output$source_multiple_header1 <- renderText({ input$source_multiple_header1 })
     output$source_multiple_map <- renderPlot({
       make_source_multiple_map()
-    })
+    }, res = 80)
     output$source_multiple_text1 <- renderText({ input$source_multiple_text1 })
     # End of source_map############################################################
     

@@ -1,10 +1,6 @@
-FROM openjdk:8-jre
+FROM openanalytics/shinyproxy:2.6.1
 
-RUN mkdir -p /opt/shinyproxy/
-RUN mkdir -p /opt/shinyproxy/logs
-RUN mkdir -p /opt/shinyproxy/templates
-COPY shinyproxy*.jar /opt/shinyproxy/shinyproxy.jar
 COPY application.yml /opt/shinyproxy/application.yml
 COPY templates/login.html /opt/shinyproxy/templates/login.html
-WORKDIR /opt/shinyproxy/
-CMD ["java", "-jar", "/opt/shinyproxy/shinyproxy.jar"]
+#WORKDIR /opt/shinyproxy/
+EXPOSE 8080

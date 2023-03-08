@@ -1,4 +1,3 @@
-
 proxy:
   port: 8080
   authentication: none
@@ -11,8 +10,8 @@ proxy:
     display-name: Chronik-Report
     description: Erstelle einen Datenbericht zu rechter Gewalt
     container-cmd: ["R", "-e", "golem::document_and_reload(); options('shiny.port'=3838,shiny.host='0.0.0.0'); rightwatching::run_app()"]
-    container-volumes: ["/root/rechtsaussen-shiny-app/data/:/build_zone/data/"]
-    container-image: chris1oph/rightwatching
+    container-volumes: ["/home/christoph/rightwatching-shiny-app/data/:/build_zone/data/"]
+    container-image: rightwatching
     container-network: sp-net
   support:
     mail-to-address: christoph@rightwatching.org

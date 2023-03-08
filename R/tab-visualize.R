@@ -39,7 +39,7 @@ tabPanel(title = "Daten darstellen & beschreiben",
          ), column(width = 9,
                    # rechts:-----------------------------------------------------------------------
                    h3(textOutput("county_timeline_header1")),
-                   plotOutput('county_timeline',  height = "600px"),
+                   plotOutput('county_timeline',  height = "800px"),
                    p(textOutput("county_timeline_text1"))
                    # ------------------------------------------------------------------------------
          ))

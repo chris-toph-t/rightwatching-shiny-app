@@ -28,7 +28,7 @@ tabPanel(title = "Daten im Kontext",
                          # links: -----------------------------------------------------------------------
                          textAreaInput("context_map_header2", "Überschrift", value = "Wo gibt es rechte Gewalt, wo wohnen Menschen", rows = 2, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;'),
-                         textAreaInput("context_map_text2", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit Bevölkerungsdichte, Quelle: eurostat gisco", rows = 7, resize = "none") %>%
+                         textAreaInput("context_map_text2", "Beschreibung", value = "Vorfälle rechter Gewalt zusammen mit Bevölkerungsdichte, Quelle: Kontur", rows = 7, resize = "none") %>%
                            shiny::tagAppendAttributes(style = 'width: 100%;')
                          
                          # ------------------------------------------------------------------------------

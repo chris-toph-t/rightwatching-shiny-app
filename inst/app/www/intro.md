@@ -15,7 +15,7 @@ Dieses Programm stellt Chroniken rechter Gewalt dar, platziert die Daten rechter
 
 ## Datenquellen
 
-Die einzelnen Chroniken werden vom Projekt [Tatort Rechts](https://tatortrechts.de) gesammelt, wir holen sie von Tatort Rechts ab. Diese App konzentriert sich auf Bundesland-spezifische Chroniken, d.h. bundesweite Chroniken sind momentan nicht integriert. 
+Die einzelnen Chroniken werden von den einzelnen Chroniken der Beratungsstellen monatlich abgeholt. [Hier ist eine](https://rightwatching.org/chroniken-der-rechten-szene) Sammlung der Chroniken. Unsere App konzentriert sich auf Bundesland-spezifische Chroniken, d.h. bundesweite Chroniken sind momentan nicht integriert. 
 
 ![Funded by BMBF](BMBF_de.png)
 

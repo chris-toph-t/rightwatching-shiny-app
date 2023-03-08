@@ -15,12 +15,7 @@ chronik_by_source_place <- reactive(
     ungroup() %>% 
     unnest(city)  
 )
-chronik_by_county <- reactive(
-  chronik_filtered() %>%
-    group_by(county, month) %>%
-    summarise(n= n())   
-)
- 
+
 chronik_by_source_date <- reactive(
   chronik_filtered() %>% 
     group_by(month, source_group) %>% 

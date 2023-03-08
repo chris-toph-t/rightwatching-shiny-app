@@ -1,4 +1,5 @@
-theme_transparent <- function(base_size = 12, base_family = "Helvetica"){
+
+theme_transparent <- function(base_size = 12){
   theme_ipsum() %+replace%
     theme(
       panel.background = element_rect(fill = "transparent", color = NA), # bg of the panel
@@ -12,21 +13,21 @@ make_barchart <- function(data = chronik_enriched, level = month) {
     ggplot2::ggplot(aes_string(x=level)) +
     geom_bar() +
     scale_x_date() +
-    theme_transparent() +
+    theme_ipsum() +
     labs(y = "Anzahl Vorfälle", x = level) 
 }
 
-make_county_timeline <- function(data = chronik_by_county, selected_kreise) {
+make_county_timeline <- function(data = chronik_enriched, selected_kreise, level = month) {
   data %>%
     filter(county %in% selected_kreise) %>%
-    ggplot(aes(x=month, y=n, group=county)) +
-    geom_line() +
+    ggplot(aes_string(x=level)) +
+    geom_bar() +
     scale_x_date(date_labels = "%b %y") +
     #scale_color_viridis(discrete = TRUE) +
     facet_wrap(~county) +
-    theme_transparent() +
+    theme_ipsum() +
     theme(legend.position = "none") +
-    labs(x = "Monat", y = "Vorfälle")
+    labs(x = level, y = "Vorfälle")
   
 }
 
@@ -84,7 +85,7 @@ make_context_map1 <- function(party = input$context_map_option1) {
 make_context_map2 <- function () {
   make_base_map(baselayer = kreise) +
     geom_sf(data = popkontur_filtered, aes(alpha = population), fill = "black", lwd=0, color = NA) +
-    stat_bin_hex(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05, lwd = 0) +
+    stat_bin_2d(data = chronik_filtered(), aes(x = longitude, y = latitude, fill = ..count..), alpha = 0.8, binwidth = 0.05, lwd = 0) +
     scale_fill_viridis(option = "C", direction = -1, end = 0.8) +
     labs(alpha = "Bevölkerungsdichte", fill = "Vorfälle laut gewählter Chronik", caption = "Bevölkerungsdichte 2022 laut Kontur") 
 }
@@ -92,7 +93,7 @@ make_context_map3 <- function() {
   make_base_map() +
     geom_sf(data = kreise, aes(geometry = geometry, fill = NATA_percentage)) +
     #stat_bin_hex(data = chronik_enriched, aes(x = lon, y = lat, fill = ..count..), alpha = 0.9, binwidth = 0.05) +
-    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "grey30", color = "grey80") +
+    geom_point(data = chronik_by_place(), aes(x = longitude, y = latitude, size = n), fill = "grey10", color = "grey10") +
     scale_fill_viridis(option = "cividis", direction = -1) +
     labs(size = "Vorfälle laut Chronik", fill = "% AusländerInnen", caption = "AusländerInnenanteil laut regionalstatistik.de") 
 }

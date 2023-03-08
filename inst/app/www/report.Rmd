@@ -36,7 +36,7 @@ make_barchart(data = chronik_filtered(), level = input$barchart_option1)
 `r input$county_timline_text1`
 
 ```{r county_timline, fig.width=12, fig.height=12}
-      make_county_timeline(data = chronik_by_county(), selected_kreise = input$county_timeline_option1) 
+      make_county_timeline(data = chronik_filtered(), selected_kreise = input$county_timeline_option1, level = input$barchart_option1) 
 ```
 
 ## Daten im Kontext
@@ -62,12 +62,6 @@ make_context_map2()
 make_context_map3()
 ```
 
-
-### `r input$context_map_header4`
-`r input$context_map_text4`
-```{r contextmap4, fig.width=12}
-make_context_map4()
-```
 
 
 ## Daten prüfen
